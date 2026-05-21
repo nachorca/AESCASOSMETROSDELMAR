@@ -119,13 +119,13 @@ export default function AdminCalendar({
   }
 
   return (
-    <div className="rounded-3xl bg-white border border-slate-200 p-5">
-      <div className="max-h-[720px] overflow-y-auto pr-2 space-y-10">
+    <div className="w-full rounded-3xl bg-white border border-slate-200 p-4 overflow-hidden">
+      <div className="max-h-[720px] overflow-y-auto pr-1 space-y-10">
         {Array.from({ length: monthsToShow }, (_, offset) => {
           const monthData = getMonthData(baseMonth, offset);
 
           return (
-            <div key={`${monthData.year}-${monthData.month}`}>
+            <div key={`${monthData.year}-${monthData.month}`} className="w-full">
               <h3 className="text-xl font-semibold capitalize mb-4 sticky top-0 bg-white z-20 py-3 border-b border-slate-100">
                 {monthData.monthName}
               </h3>
@@ -155,7 +155,7 @@ export default function AdminCalendar({
                   return (
                     <div
                       key={dateKey}
-                      className="relative min-h-[145px] border-r border-b border-slate-200 bg-white p-2 overflow-hidden"
+                      className="relative min-h-[120px] border-r border-b border-slate-200 bg-white p-1.5 overflow-hidden"
                     >
                       <div className="font-semibold text-slate-900 mb-2">{day}</div>
 
@@ -204,7 +204,7 @@ export default function AdminCalendar({
                           onBlur={(e) =>
                             savePrice(dateKey, Number(e.target.value))
                           }
-                          className="w-full rounded-lg border border-slate-300 px-2 py-1 text-slate-900"
+                          className="w-full min-w-0 rounded-lg border border-slate-300 px-1.5 py-1 text-slate-900 text-xs"
                         />
                         {savingDate === dateKey && (
                           <p className="text-[11px] mt-1 text-slate-500">Guardando...</p>

@@ -65,6 +65,8 @@ export default function AvailabilityCalendar() {
   const [guests, setGuests] = useState(2);
   const [bookingError, setBookingError] = useState("");
   const [dailyPrices, setDailyPrices] = useState<Record<string, number>>({});
+  const [weeklyDiscount, setWeeklyDiscount] = useState(0);
+  const [monthlyDiscount, setMonthlyDiscount] = useState(0);
 
   const today = new Date();
   const baseMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -80,12 +82,14 @@ export default function AvailabilityCalendar() {
           fetch("/api/reservas"),
           fetch("/api/manual-blocks"),
           fetch("/api/prices"),
+          fetch("/api/pricing-rules"),
         ]);
 
         const availabilityData = await availabilityRes.json();
         const reservasData = await reservasRes.json();
         const manualBlocksData = await manualBlocksRes.json();
         const pricesData = await pricesRes.json();
+        const pricingRulesData = await pricingRulesRes.json();
 
         const icalBlocked = availabilityData.ok
           ? availabilityData.blocked || []
@@ -117,6 +121,11 @@ export default function AvailabilityCalendar() {
             map[p.date] = p.price;
           });
           setDailyPrices(map);
+        }
+
+        if (pricingRulesData.ok) {
+          setWeeklyDiscount(pricingRulesData.rules.weekly_discount || 0);
+          setMonthlyDiscount(pricingRulesData.rules.monthly_discount || 0);
         }
       } catch (error) {
         console.error("Error cargando disponibilidad:", error);
@@ -188,7 +197,17 @@ export default function AvailabilityCalendar() {
   }
 
   const subtotal = calculateSubtotal();
-  const total = nights ? subtotal + cleaningFee : 0;
+
+  const activeDiscount =
+    nights >= 28 && monthlyDiscount > 0
+      ? monthlyDiscount
+      : nights >= 7 && weeklyDiscount > 0
+      ? weeklyDiscount
+      : 0;
+
+  const discountAmount = Math.round((subtotal * activeDiscount) / 100);
+  const discountedSubtotal = subtotal - discountAmount;
+  const total = nights ? discountedSubtotal + cleaningFee : 0;
 
   async function handlePayment() {
     if (!checkIn || !checkOut || !total) return;
@@ -354,6 +373,15 @@ export default function AvailabilityCalendar() {
             <span>Precio estancia × {nights} noches</span>
             <span>{subtotal} €</span>
           </div>
+
+          {activeDiscount > 0 && (
+            <div className="flex justify-between mb-2 text-emerald-700 font-medium">
+              <span>
+                Descuento estancia {nights >= 28 ? "mensual" : "semanal"} ({activeDiscount}%)
+              </span>
+              <span>-{discountAmount} €</span>
+            </div>
+          )}
 
           <div className="flex justify-between mb-2">
             <span>Limpieza</span>

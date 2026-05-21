@@ -77,7 +77,7 @@ export default function AvailabilityCalendar() {
   useEffect(() => {
     async function loadAvailability() {
       try {
-        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes] = await Promise.all([
+        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes, pricingRulesRes] = await Promise.all([
           fetch("/api/availability"),
           fetch("/api/reservas"),
           fetch("/api/manual-blocks"),

@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "apartment": "Apartment",
+    "services": "Amenities",
+    "location": "Location",
+    "gallery": "Gallery",
+    "book": "Book now"
+  },
+  "hero": {
+    "location": "El Campello · Alicante",
+    "title": "Just steps from the sea",
+    "subtitle": "Our little Los Roques",
+    "description": "A bright apartment just 50 metres from the Mediterranean. Perfect for holidays, getaways and working remotely by the sea.",
+    "bookNow": "Book now",
+    "seeApartment": "See the apartment",
+    "card1Title": "50m from the sea 🌊",
+    "card1Text": "Cross the promenade and you're on the beach. A bright apartment with a Mediterranean breeze.",
+    "card2Title": "Book direct 💶",
+    "card2Text": "Up to 18% cheaper than Airbnb. No fees, direct support via WhatsApp.",
+    "card3Title": "1000 Mbps fibre 📶",
+    "card3Text": "Ideal for working remotely by the sea. Smart TV, AC, dishwasher and a fully equipped kitchen."
+  },
+  "quickCards": {
+    "capacityTitle": "Capacity",
+    "capacityText": "Up to 4 guests",
+    "spaceTitle": "Space",
+    "spaceText": "90 m² · 2 bedrooms",
+    "locationTitle": "Location",
+    "locationText": "El Campello seafront promenade",
+    "bookingTitle": "Booking",
+    "bookingText": "Secure online payment"
+  },
+  "directBooking": {
+    "label": "Book direct",
+    "title": "Why book here instead of Airbnb?",
+    "perk1": "Up to 18% cheaper than Airbnb (no fees)",
+    "perk2": "Direct support from the host via WhatsApp",
+    "perk3": "Flexible check-in at no extra cost",
+    "perk4": "Free cancellation up to 7 days before",
+    "perk5": "Welcome bottle of cava 🍾"
+  },
+  "amenities": {
+    "label": "Amenities",
+    "title": "Everything you need",
+    "wifi": "1000 Mbps fibre WiFi",
+    "ac": "Air conditioning",
+    "heating": "Heating",
+    "kitchen": "Fully equipped kitchen",
+    "coffee": "Coffee machine",
+    "washer": "Washing machine",
+    "dishwasher": "Dishwasher",
+    "tv": "Smart TV",
+    "terrace": "Terrace",
+    "elevator": "Lift",
+    "parking": "Parking",
+    "beach": "50m from the beach"
+  },
+  "location": {
+    "label": "Location",
+    "title": "El Campello, the promenade and the Mediterranean",
+    "description": "Just steps from the sea is located in El Campello, one of the most pleasant coastal areas of Alicante, ideal for enjoying the Mediterranean Sea, the seafront promenade, restaurants, the beach and peaceful stays by the water.",
+    "point1": "El Campello promenade 50m away",
+    "point2": "Beach and restaurants nearby",
+    "point3": "Direct TRAM connection to Alicante",
+    "point4": "Ideal for holidays, getaways or remote work"
+  },
+  "booking": {
+    "label": "Booking",
+    "title": "Check availability and book your stay",
+    "description": "Real-time calendar. 100% secure card payment. Instant confirmation by email and WhatsApp.",
+    "securePaymentTitle": "Secure payment",
+    "securePaymentText": "Encrypted gateway with Stripe. All cards accepted.",
+    "instantTitle": "Instant confirmation",
+    "instantText": "You'll receive an email and WhatsApp message with all the details right away.",
+    "hostTitle": "A host close by",
+    "hostText": "I'm Jose, and I'll help you before, during and after your stay."
+  },
+  "footer": {
+    "nickname": "Our little Los Roques",
+    "contactTitle": "Contact",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "legalTitle": "Legal",
+    "rights": "All rights reserved.",
+    "ownerAccess": "Owner access"
+  },
+  "payment": {
+    "successTitle": "Booking received successfully",
+    "successText1": "Your payment has been processed successfully. We have received your booking request.",
+    "successText2": "We'll contact you shortly to confirm all the details of your stay.",
+    "cancelledTitle": "Payment cancelled",
+    "cancelledText": "The payment process was cancelled and no charge has been made.",
+    "backHome": "Back to the home page",
+    "cancelledText2": "You can try again or contact us directly via WhatsApp.",
+    "backBooking": "Back to booking"
+  }
+}

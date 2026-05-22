@@ -58,6 +58,9 @@ export default function LegalLayout({
           <Link href="/legal/cookies" className="text-slate-600 hover:text-slate-900 underline">
             Política de cookies
           </Link>
+          <Link href="/legal/condiciones-venta" className="text-slate-600 hover:text-slate-900 underline">
+            Condiciones de venta
+          </Link>
         </nav>
       </article>
     </main>

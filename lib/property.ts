@@ -90,8 +90,6 @@ export const propertyConfig = {
     "Hasta un 18% más barato que en Airbnb (sin comisiones)",
     "Atención directa por WhatsApp con el anfitrión",
     "Check-in flexible sin coste extra",
-    "Cancelación gratuita hasta 7 días antes",
-    "Botella de cava de bienvenida 🍾",
   ],
 
   // --- Contacto ---

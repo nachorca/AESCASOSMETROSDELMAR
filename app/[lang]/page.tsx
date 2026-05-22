@@ -370,6 +370,9 @@ export default async function Home({
               <Link href="/legal/cookies" className="hover:text-white">
                 Política de cookies
               </Link>
+              <Link href="/legal/condiciones-venta" className="hover:text-white">
+                Condiciones de venta
+              </Link>
             </p>
             <p className="mt-2">
               © {new Date().getFullYear()} {propertyConfig.brand}.{" "}

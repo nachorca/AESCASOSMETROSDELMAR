@@ -1,0 +1,97 @@
+{
+  "nav": {
+    "apartment": "Apartamento",
+    "services": "Servicios",
+    "location": "Ubicación",
+    "gallery": "Galería",
+    "book": "Reservar"
+  },
+  "hero": {
+    "location": "El Campello · Alicante",
+    "title": "A escasos metros del mar",
+    "subtitle": "Nuestro pequeño Los Roques",
+    "description": "Un apartamento luminoso a 50 metros del Mediterráneo. Perfecto para vacaciones, escapadas y teletrabajo frente al mar.",
+    "bookNow": "Reservar ahora",
+    "seeApartment": "Ver apartamento",
+    "card1Title": "A 50m del mar 🌊",
+    "card1Text": "Cruza el paseo marítimo y estás en la playa. Apartamento luminoso con brisa mediterránea.",
+    "card2Title": "Reserva directa 💶",
+    "card2Text": "Hasta un 18% más barato que en Airbnb. Sin comisiones, atención directa por WhatsApp.",
+    "card3Title": "Fibra 1000 Mbps 📶",
+    "card3Text": "Ideal para teletrabajar frente al mar. Smart TV, AC, lavavajillas y cocina equipada."
+  },
+  "quickCards": {
+    "capacityTitle": "Capacidad",
+    "capacityText": "Hasta 4 huéspedes",
+    "spaceTitle": "Espacio",
+    "spaceText": "90 m² · 2 dormitorios",
+    "locationTitle": "Ubicación",
+    "locationText": "Paseo marítimo de El Campello",
+    "bookingTitle": "Reserva",
+    "bookingText": "Pago seguro online"
+  },
+  "directBooking": {
+    "label": "Reserva directa",
+    "title": "¿Por qué reservar aquí y no en Airbnb?",
+    "perk1": "Hasta un 18% más barato que en Airbnb (sin comisiones)",
+    "perk2": "Atención directa por WhatsApp con el anfitrión",
+    "perk3": "Check-in flexible sin coste extra",
+    "perk4": "Cancelación gratuita hasta 7 días antes",
+    "perk5": "Botella de cava de bienvenida 🍾"
+  },
+  "amenities": {
+    "label": "Equipamiento",
+    "title": "Todo lo que necesitas",
+    "wifi": "WiFi fibra 1000 Mbps",
+    "ac": "Aire acondicionado",
+    "heating": "Calefacción",
+    "kitchen": "Cocina totalmente equipada",
+    "coffee": "Cafetera",
+    "washer": "Lavadora",
+    "dishwasher": "Lavavajillas",
+    "tv": "Smart TV",
+    "terrace": "Terraza",
+    "elevator": "Ascensor",
+    "parking": "Parking",
+    "beach": "A 50m de la playa"
+  },
+  "location": {
+    "label": "Ubicación",
+    "title": "El Campello, paseo marítimo y Mediterráneo",
+    "description": "A escasos metros del mar se encuentra en El Campello, una de las zonas costeras más agradables de Alicante, ideal para disfrutar del mar Mediterráneo, el paseo marítimo, restaurantes, playa y estancias tranquilas junto al mar.",
+    "point1": "Paseo marítimo de El Campello a 50m",
+    "point2": "Playa y restaurantes cercanos",
+    "point3": "Conexión TRAM directa con Alicante",
+    "point4": "Ideal para vacaciones, escapadas o teletrabajo"
+  },
+  "booking": {
+    "label": "Reservas",
+    "title": "Consulta disponibilidad y reserva tu estancia",
+    "description": "Calendario en tiempo real. Pago 100% seguro con tarjeta. Confirmación inmediata por email y WhatsApp.",
+    "securePaymentTitle": "Pago seguro",
+    "securePaymentText": "Pasarela cifrada con Stripe. Aceptamos todas las tarjetas.",
+    "instantTitle": "Confirmación inmediata",
+    "instantText": "Recibirás email y WhatsApp con todos los detalles al instante.",
+    "hostTitle": "Anfitrión cercano",
+    "hostText": "Soy Jose, te ayudaré antes, durante y después de tu estancia."
+  },
+  "footer": {
+    "nickname": "Nuestro pequeño Los Roques",
+    "contactTitle": "Contacto",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "legalTitle": "Legal",
+    "rights": "Todos los derechos reservados.",
+    "ownerAccess": "Acceso propietario"
+  },
+  "payment": {
+    "successTitle": "Reserva recibida correctamente",
+    "successText1": "El pago se ha procesado correctamente. Hemos recibido tu solicitud de reserva.",
+    "successText2": "En breve contactaremos contigo para confirmar todos los detalles de tu estancia.",
+    "cancelledTitle": "Pago cancelado",
+    "cancelledText": "El proceso de pago se ha cancelado y no se ha realizado ningún cargo.",
+    "backHome": "Volver a la página principal",
+    "cancelledText2": "Puedes volver a intentarlo o contactar directamente por WhatsApp.",
+    "backBooking": "Volver a reservar"
+  }
+}

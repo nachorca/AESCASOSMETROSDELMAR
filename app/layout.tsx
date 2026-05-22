@@ -1,3 +1,16 @@
+// app/layout.tsx
+// ============================================================
+// Layout raíz
+// ============================================================
+// Contiene el <html> y <body> (Next.js los necesita en la raíz)
+// y carga Vercel Analytics + Speed Insights.
+//
+// El atributo lang="es" es el valor por defecto. El layout de
+// app/[lang]/ ajustará el contenido al idioma correcto. Para el
+// SEO multiidioma, lo que de verdad cuenta son las rutas /es,
+// /en, /fr... y las etiquetas hreflang (se añaden más adelante).
+// ============================================================
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";

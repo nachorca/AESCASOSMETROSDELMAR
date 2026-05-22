@@ -510,8 +510,13 @@ export default function AdminPage() {
 
             <tbody>
               {unifiedRows.map((r) => (
-                <tr key={`${r.tipo}-${r.id}`} className="border-t border-slate-200">
-                  <td className="p-3">{r.tipo}</td>
+                <tr
+                  key={`${r.tipo}-${r.id}`}
+                  className={`border-t border-slate-200 ${
+                    r.estado === "conflict" ? "bg-red-50" : ""
+                  }`}
+                >
+                <td className="p-3">{r.tipo}</td>
                   <td className="p-3">
                     {r.manual ? (
                       <input
@@ -553,7 +558,15 @@ export default function AdminPage() {
                   </td>
                   <td className="p-3">{r.huespedes}</td>
                   <td className="p-3">{r.pago}</td>
-                  <td className="p-3">{r.estado}</td>
+                  <td className="p-3">
+                    {r.estado === "conflict" ? (
+                      <span className="rounded-lg bg-red-600 text-white px-2 py-1 text-xs font-semibold">
+                        ⚠️ CONFLICTO — revisar
+                      </span>
+                    ) : (
+                      r.estado
+                    )}
+                  </td>
 
                   <td className="p-3">
                     <select

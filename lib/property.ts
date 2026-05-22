@@ -1,18 +1,24 @@
 // lib/property.ts
 // ============================================================
-// Configuración central del apartamento Los Roques
+// Configuración central del apartamento
 // ============================================================
 // Toda la información del apartamento vive aquí.
 // Si cambia algo (precio, equipamiento, normas...), se cambia
 // SOLO en este archivo y se actualiza en toda la web.
+//
+// NAMING:
+//   - name / brand  -> "A escasos metros del mar" (nombre oficial,
+//     el que aparece en Airbnb y Booking)
+//   - nickname      -> "Los Roques" (guiño personal, gancho)
 // ============================================================
 
 export const propertyConfig = {
   // --- Identidad y marca ---
-  brand: "Los Roques",
-  name: "Los Roques",
-  tagline: "A escasos metros del mar",
-  slug: "los-roques-campello",
+  brand: "A escasos metros del mar",
+  name: "A escasos metros del mar",
+  nickname: "Los Roques", // guiño personal, se usa solo como gancho
+  tagline: "El Campello · Costa Blanca",
+  slug: "a-escasos-metros-del-mar-campello",
 
   // --- Ubicación ---
   city: "El Campello",
@@ -22,14 +28,14 @@ export const propertyConfig = {
   distanceToBeachMeters: 50,
 
   // --- Hero ---
-  heroTitle: "Los Roques",
-  heroSubtitle: "A escasos metros del mar · El Campello, Costa Blanca",
+  heroTitle: "A escasos metros del mar",
+  heroSubtitle: "Nuestro pequeño Los Roques · El Campello, Alicante",
   heroDescription:
     "Un apartamento luminoso a 50 metros del Mediterráneo. Perfecto para vacaciones, escapadas y teletrabajo frente al mar.",
 
   // --- Descripción larga (para SEO y secciones) ---
   description:
-    "Los Roques es un apartamento turístico premium en El Campello, a tan solo 50 metros del mar. 90 m² con 2 dormitorios, 2 baños, terraza y todo el equipamiento necesario. WiFi de fibra de 1000 Mbps, aire acondicionado y cocina totalmente equipada. Ideal para familias y grupos que buscan calidad, comodidad y mar.",
+    "A escasos metros del mar es un apartamento turístico en El Campello, a tan solo 50 metros del mar. 90 m² con 2 dormitorios, 2 baños, terraza y todo el equipamiento necesario. WiFi de fibra de 1000 Mbps, aire acondicionado y cocina totalmente equipada. Ideal para familias y grupos que buscan calidad, comodidad y mar.",
 
   // --- Capacidad ---
   maxGuests: 4,
@@ -115,7 +121,7 @@ export const propertyConfig = {
   mapsQuery: "El Campello Alicante paseo marítimo",
 
   // --- URLs externas ---
-  airbnbUrl: "", // TODO: añadir URL del listing en Airbnb
+  airbnbUrl: "", // TODO: añadir URL pública del listing en Airbnb
   bookingUrl:
     "https://www.booking.com/hotel/es/a-metros-de-la-playa-el-campello.es.html",
 } as const;

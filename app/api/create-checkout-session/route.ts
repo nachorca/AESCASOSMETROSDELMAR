@@ -3,7 +3,7 @@
 // Crea la sesión de pago de Stripe para una reserva directa
 // ============================================================
 // Antes de crear la sesión de pago, valida la disponibilidad
-// con checkAvailability (que ahora comprueba reservas directas,
+// con checkAvailability (que comprueba reservas directas,
 // bloqueos manuales y reservas externas de Airbnb/Booking).
 // La revalidación definitiva se hace en el webhook de Stripe.
 // ============================================================
@@ -37,9 +37,9 @@ export async function POST(req: Request) {
           price_data: {
             currency: "eur",
             product_data: {
-              name: "Reserva - Los Roques",
+              name: "Reserva - A escasos metros del mar",
               description:
-                "Reserva del apartamento turístico Los Roques en El Campello",
+                "Reserva del apartamento turístico en El Campello",
             },
             unit_amount: body.amount || 10000,
           },

@@ -177,8 +177,6 @@ export default async function Home({
               t("directBooking.perk1"),
               t("directBooking.perk2"),
               t("directBooking.perk3"),
-              t("directBooking.perk4"),
-              t("directBooking.perk5"),
             ].map((perk) => (
               <div
                 key={perk}

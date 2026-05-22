@@ -82,8 +82,8 @@ export default function Home() {
                 A 50m del mar 🌊
               </h2>
               <p className="text-slate-600">
-                Cruza el paseo marítimo y estás en la playa. Vistas y brisa
-                mediterránea desde una planta 18.
+                Cruza el paseo marítimo y estás en la playa. Apartamento
+                luminoso con brisa mediterránea.
               </p>
             </div>
 
@@ -114,9 +114,18 @@ export default function Home() {
       <section id="apartamento" className="px-6 py-16 bg-[#f7f4ee]">
         <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-4">
           {[
-            { title: "Capacidad", text: `Hasta ${propertyConfig.maxGuests} huéspedes` },
-            { title: "Ubicación", text: `Paseo marítimo de ${propertyConfig.city}` },
-            { title: "Conexión", text: `TRAM directo a ${propertyConfig.province}` },
+            {
+              title: "Capacidad",
+              text: `Hasta ${propertyConfig.maxGuests} huéspedes`,
+            },
+            {
+              title: "Espacio",
+              text: `${propertyConfig.squareMeters} m² · ${propertyConfig.bedrooms} dormitorios`,
+            },
+            {
+              title: "Ubicación",
+              text: `Paseo marítimo de ${propertyConfig.city}`,
+            },
             { title: "Reserva", text: "Pago seguro online" },
           ].map((item) => (
             <div

@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "apartment": "Het appartement",
+    "services": "Voorzieningen",
+    "location": "Locatie",
+    "gallery": "Galerij",
+    "book": "Boeken"
+  },
+  "hero": {
+    "location": "El Campello · Alicante",
+    "title": "Op een paar stappen van de zee",
+    "subtitle": "Ons kleine Los Roques",
+    "description": "Een licht appartement op slechts 50 meter van de Middellandse Zee. Ideaal voor vakanties, uitstapjes en thuiswerken aan zee.",
+    "bookNow": "Nu boeken",
+    "seeApartment": "Bekijk het appartement",
+    "card1Title": "50 m van de zee 🌊",
+    "card1Text": "Steek de boulevard over en u staat op het strand. Een licht appartement met een mediterrane bries.",
+    "card2Title": "Rechtstreeks boeken 💶",
+    "card2Text": "Tot 18 % goedkoper dan op Airbnb. Geen commissies, met directe ondersteuning via WhatsApp.",
+    "card3Title": "Glasvezel 1000 Mbps 📶",
+    "card3Text": "Perfect om aan zee thuis te werken. Smart-tv, airco, vaatwasser en een volledig uitgeruste keuken."
+  },
+  "quickCards": {
+    "capacityTitle": "Capaciteit",
+    "capacityText": "Tot 4 gasten",
+    "spaceTitle": "Ruimte",
+    "spaceText": "90 m² · 2 slaapkamers",
+    "locationTitle": "Locatie",
+    "locationText": "Strandboulevard van El Campello",
+    "bookingTitle": "Boeking",
+    "bookingText": "Veilig online betalen"
+  },
+  "directBooking": {
+    "label": "Rechtstreeks boeken",
+    "title": "Waarom hier boeken in plaats van op Airbnb?",
+    "perk1": "Tot 18 % goedkoper dan op Airbnb (geen commissies)",
+    "perk2": "Directe ondersteuning van de gastheer via WhatsApp",
+    "perk3": "Flexibele check-in zonder extra kosten"
+  },
+  "amenities": {
+    "label": "Voorzieningen",
+    "title": "Alles wat u nodig heeft",
+    "wifi": "Wifi glasvezel 1000 Mbps",
+    "ac": "Airconditioning",
+    "heating": "Verwarming",
+    "kitchen": "Volledig uitgeruste keuken",
+    "coffee": "Koffiezetapparaat",
+    "washer": "Wasmachine",
+    "dishwasher": "Vaatwasser",
+    "tv": "Smart-tv",
+    "terrace": "Terras",
+    "elevator": "Lift",
+    "parking": "Parkeerplaats",
+    "beach": "50 m van het strand"
+  },
+  "location": {
+    "label": "Locatie",
+    "title": "El Campello, de boulevard en de Middellandse Zee",
+    "description": "Op een paar stappen van de zee ligt in El Campello, een van de aangenaamste kustgebieden van Alicante, ideaal om te genieten van de Middellandse Zee, de strandboulevard, de restaurants, het strand en een rustig verblijf aan het water.",
+    "point1": "Strandboulevard van El Campello op 50 m",
+    "point2": "Strand en restaurants vlakbij",
+    "point3": "Directe TRAM-verbinding met Alicante",
+    "point4": "Ideaal voor vakanties, uitstapjes of thuiswerken"
+  },
+  "booking": {
+    "label": "Boeking",
+    "title": "Controleer de beschikbaarheid en boek uw verblijf",
+    "description": "Realtime kalender. 100 % veilige kaartbetaling. Onmiddellijke bevestiging per e-mail en WhatsApp.",
+    "securePaymentTitle": "Veilig betalen",
+    "securePaymentText": "Versleuteld platform met Stripe. Alle kaarten geaccepteerd.",
+    "instantTitle": "Onmiddellijke bevestiging",
+    "instantText": "U ontvangt direct een e-mail en een WhatsApp-bericht met alle details.",
+    "hostTitle": "Een gastheer dicht bij u",
+    "hostText": "Ik ben Jose en ik help u voor, tijdens en na uw verblijf."
+  },
+  "footer": {
+    "nickname": "Ons kleine Los Roques",
+    "contactTitle": "Contact",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "legalTitle": "Juridisch",
+    "registrationLabel": "Toeristisch registratienummer",
+    "legalNotice": "Juridische kennisgeving",
+    "privacy": "Privacybeleid",
+    "cookies": "Cookiebeleid",
+    "salesTerms": "Verkoopvoorwaarden",
+    "rights": "Alle rechten voorbehouden.",
+    "ownerAccess": "Eigenaarstoegang"
+  },
+  "payment": {
+    "successTitle": "Boeking succesvol ontvangen",
+    "successText1": "Uw betaling is succesvol verwerkt. We hebben uw boekingsaanvraag ontvangen.",
+    "successText2": "We nemen binnenkort contact met u op om alle details van uw verblijf te bevestigen.",
+    "cancelledTitle": "Betaling geannuleerd",
+    "cancelledText": "Het betalingsproces is geannuleerd en er is geen bedrag in rekening gebracht.",
+    "backHome": "Terug naar de startpagina",
+    "cancelledText2": "U kunt het opnieuw proberen of rechtstreeks contact met ons opnemen via WhatsApp.",
+    "backBooking": "Terug naar de boeking"
+  }
+}

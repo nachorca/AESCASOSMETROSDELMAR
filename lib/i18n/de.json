@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "apartment": "Die Wohnung",
+    "services": "Ausstattung",
+    "location": "Lage",
+    "gallery": "Galerie",
+    "book": "Buchen"
+  },
+  "hero": {
+    "location": "El Campello · Alicante",
+    "title": "Nur wenige Schritte vom Meer",
+    "subtitle": "Unser kleines Los Roques",
+    "description": "Eine helle Wohnung nur 50 Meter vom Mittelmeer entfernt. Ideal für Urlaub, Kurztrips und Homeoffice am Meer.",
+    "bookNow": "Jetzt buchen",
+    "seeApartment": "Die Wohnung entdecken",
+    "card1Title": "50 m vom Meer 🌊",
+    "card1Text": "Überqueren Sie die Promenade und Sie sind am Strand. Eine helle Wohnung mit mediterraner Brise.",
+    "card2Title": "Direkt buchen 💶",
+    "card2Text": "Bis zu 18 % günstiger als bei Airbnb. Ohne Gebühren, mit direktem Support per WhatsApp.",
+    "card3Title": "Glasfaser 1000 Mbit/s 📶",
+    "card3Text": "Perfekt für Homeoffice am Meer. Smart-TV, Klimaanlage, Geschirrspüler und voll ausgestattete Küche."
+  },
+  "quickCards": {
+    "capacityTitle": "Kapazität",
+    "capacityText": "Bis zu 4 Gäste",
+    "spaceTitle": "Fläche",
+    "spaceText": "90 m² · 2 Schlafzimmer",
+    "locationTitle": "Lage",
+    "locationText": "Strandpromenade von El Campello",
+    "bookingTitle": "Buchung",
+    "bookingText": "Sichere Online-Zahlung"
+  },
+  "directBooking": {
+    "label": "Direkt buchen",
+    "title": "Warum hier buchen statt bei Airbnb?",
+    "perk1": "Bis zu 18 % günstiger als bei Airbnb (ohne Gebühren)",
+    "perk2": "Direkter Support vom Gastgeber per WhatsApp",
+    "perk3": "Flexibler Check-in ohne Aufpreis"
+  },
+  "amenities": {
+    "label": "Ausstattung",
+    "title": "Alles, was Sie brauchen",
+    "wifi": "WLAN Glasfaser 1000 Mbit/s",
+    "ac": "Klimaanlage",
+    "heating": "Heizung",
+    "kitchen": "Voll ausgestattete Küche",
+    "coffee": "Kaffeemaschine",
+    "washer": "Waschmaschine",
+    "dishwasher": "Geschirrspüler",
+    "tv": "Smart-TV",
+    "terrace": "Terrasse",
+    "elevator": "Aufzug",
+    "parking": "Parkplatz",
+    "beach": "50 m vom Strand"
+  },
+  "location": {
+    "label": "Lage",
+    "title": "El Campello, die Promenade und das Mittelmeer",
+    "description": "Nur wenige Schritte vom Meer befindet sich in El Campello, einer der angenehmsten Küstengegenden von Alicante, ideal um das Mittelmeer, die Strandpromenade, die Restaurants, den Strand und einen ruhigen Aufenthalt am Wasser zu genießen.",
+    "point1": "Strandpromenade von El Campello 50 m entfernt",
+    "point2": "Strand und Restaurants in der Nähe",
+    "point3": "Direkte TRAM-Verbindung nach Alicante",
+    "point4": "Ideal für Urlaub, Kurztrips oder Homeoffice"
+  },
+  "booking": {
+    "label": "Buchung",
+    "title": "Verfügbarkeit prüfen und Aufenthalt buchen",
+    "description": "Echtzeit-Kalender. 100 % sichere Kartenzahlung. Sofortige Bestätigung per E-Mail und WhatsApp.",
+    "securePaymentTitle": "Sichere Zahlung",
+    "securePaymentText": "Verschlüsselte Plattform mit Stripe. Alle Karten akzeptiert.",
+    "instantTitle": "Sofortige Bestätigung",
+    "instantText": "Sie erhalten umgehend eine E-Mail und eine WhatsApp-Nachricht mit allen Details.",
+    "hostTitle": "Ein Gastgeber ganz in Ihrer Nähe",
+    "hostText": "Ich bin Jose und begleite Sie vor, während und nach Ihrem Aufenthalt."
+  },
+  "footer": {
+    "nickname": "Unser kleines Los Roques",
+    "contactTitle": "Kontakt",
+    "whatsapp": "WhatsApp",
+    "email": "E-Mail",
+    "legalTitle": "Rechtliches",
+    "registrationLabel": "Tourismusregisternummer",
+    "legalNotice": "Impressum",
+    "privacy": "Datenschutzerklärung",
+    "cookies": "Cookie-Richtlinie",
+    "salesTerms": "Verkaufsbedingungen",
+    "rights": "Alle Rechte vorbehalten.",
+    "ownerAccess": "Eigentümerzugang"
+  },
+  "payment": {
+    "successTitle": "Buchung erfolgreich erhalten",
+    "successText1": "Ihre Zahlung wurde erfolgreich verarbeitet. Wir haben Ihre Buchungsanfrage erhalten.",
+    "successText2": "Wir werden uns in Kürze mit Ihnen in Verbindung setzen, um alle Details Ihres Aufenthalts zu bestätigen.",
+    "cancelledTitle": "Zahlung abgebrochen",
+    "cancelledText": "Der Zahlungsvorgang wurde abgebrochen und es wurde keine Belastung vorgenommen.",
+    "backHome": "Zurück zur Startseite",
+    "cancelledText2": "Sie können es erneut versuchen oder uns direkt per WhatsApp kontaktieren.",
+    "backBooking": "Zurück zur Buchung"
+  }
+}

@@ -25,17 +25,17 @@ export const propertyConfig = {
   heroTitle: "Los Roques",
   heroSubtitle: "A escasos metros del mar · El Campello, Costa Blanca",
   heroDescription:
-    "Un apartamento luminoso en la planta 18, a 50 metros del Mediterráneo. Perfecto para vacaciones, escapadas y teletrabajo frente al mar.",
+    "Un apartamento luminoso a 50 metros del Mediterráneo. Perfecto para vacaciones, escapadas y teletrabajo frente al mar.",
 
   // --- Descripción larga (para SEO y secciones) ---
   description:
-    "Los Roques es un apartamento turístico premium en El Campello, situado en una planta alta con vistas privilegiadas y a tan solo 50 metros del mar. Cuenta con WiFi de fibra de 1000 Mbps, aire acondicionado, cocina totalmente equipada y terraza. Ideal para parejas, familias pequeñas y nómadas digitales que buscan calidad, comodidad y mar.",
+    "Los Roques es un apartamento turístico premium en El Campello, a tan solo 50 metros del mar. 90 m² con 2 dormitorios, 2 baños, terraza y todo el equipamiento necesario. WiFi de fibra de 1000 Mbps, aire acondicionado y cocina totalmente equipada. Ideal para familias y grupos que buscan calidad, comodidad y mar.",
 
   // --- Capacidad ---
-  maxGuests: 3,
+  maxGuests: 4,
   minAge: 18,
 
-  // --- Precios (base — los precios reales del calendario están en Supabase) ---
+  // --- Precios (base; los precios reales del calendario están en Supabase) ---
   basePrice: 130,
   cleaningFee: 75,
   currency: "EUR",
@@ -46,15 +46,14 @@ export const propertyConfig = {
   minNights: 2,
 
   // --- Características físicas ---
-  floor: 18,
-  hasElevator: true, // TODO: confirmar
-  hasParking: false, // TODO: confirmar
+  squareMeters: 90,
+  bedrooms: 2,
+  bathrooms: 2,
+  beds: ["1 cama doble de matrimonio", "3 camas individuales"],
+  cribAvailable: true, // cuna disponible bajo petición
+  hasElevator: true,
+  hasParking: true,
   hasTerrace: true,
-  hasSeaView: true, // TODO: confirmar
-  // squareMeters: 0, // TODO: añadir
-  // bedrooms: 0,     // TODO: añadir
-  // bathrooms: 0,    // TODO: añadir
-  // beds: [],        // TODO: añadir (ej: ["1 cama doble", "1 sofá cama"])
 
   // --- Normas ---
   rules: {
@@ -75,8 +74,8 @@ export const propertyConfig = {
     { icon: "🍽️", label: "Lavavajillas", category: "kitchen" },
     { icon: "📺", label: "Smart TV", category: "entertainment" },
     { icon: "🌅", label: "Terraza", category: "outdoor" },
-    { icon: "🛏️", label: "Ropa de cama incluida", category: "essentials" },
-    { icon: "🧻", label: "Toallas incluidas", category: "essentials" },
+    { icon: "🛗", label: "Ascensor", category: "building" },
+    { icon: "🚗", label: "Parking", category: "building" },
     { icon: "🏖️", label: "A 50m de la playa", category: "location" },
   ],
 
@@ -92,9 +91,9 @@ export const propertyConfig = {
   // --- Contacto ---
   whatsappPhone: "34665691462",
   whatsappDisplay: "+34 665 691 462",
-  email: "", // TODO: añadir email de contacto
+  email: "info@aescasosmetrosdelmar.com",
   hostName: "Jose",
-  hostLanguages: ["Español"], // TODO: añadir más si corresponde
+  hostLanguages: ["Español"],
 
   // --- Legal (obligatorio en Comunidad Valenciana) ---
   touristRegistrationNumber: "", // TODO: añadir VT-xxxxxx-A
@@ -117,6 +116,8 @@ export const propertyConfig = {
 
   // --- URLs externas ---
   airbnbUrl: "", // TODO: añadir URL del listing en Airbnb
+  bookingUrl:
+    "https://www.booking.com/hotel/es/a-metros-de-la-playa-el-campello.es.html",
 } as const;
 
 // Tipo inferido para usar en otros componentes con autocompletado

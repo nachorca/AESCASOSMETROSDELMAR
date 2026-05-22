@@ -314,6 +314,14 @@ export default function Home() {
               © {new Date().getFullYear()} {propertyConfig.brand}. Todos los
               derechos reservados.
             </p>
+            <p className="mt-4">
+              <a
+                href="/admin"
+                className="text-white/40 hover:text-white/70 transition text-xs"
+              >
+                Acceso propietario
+              </a>
+            </p>
           </div>
         </div>
       </footer>

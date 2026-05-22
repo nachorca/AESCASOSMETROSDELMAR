@@ -102,7 +102,7 @@ export const propertyConfig = {
   hostLanguages: ["Español"],
 
   // --- Legal (obligatorio en Comunidad Valenciana) ---
-  touristRegistrationNumber: "", // TODO: añadir VT-xxxxxx-A
+  touristRegistrationNumber: "VT-509802-A",
   legalEntity: "", // TODO: añadir NIF/CIF si corresponde
 
   // --- Imágenes ---

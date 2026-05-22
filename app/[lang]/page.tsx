@@ -1,4 +1,5 @@
 // app/[lang]/page.tsx
+import Link from "next/link";
 import AvailabilityCalendar from "@/components/AvailabilityCalendar";
 import { propertyConfig } from "@/lib/property";
 import HeroCarousel from "@/components/HeroCarousel";
@@ -359,6 +360,17 @@ export default async function Home({
                 {propertyConfig.touristRegistrationNumber}
               </p>
             )}
+            <p className="mt-3 flex flex-col gap-1">
+              <Link href="/legal/aviso-legal" className="hover:text-white">
+                Aviso legal
+              </Link>
+              <Link href="/legal/privacidad" className="hover:text-white">
+                Política de privacidad
+              </Link>
+              <Link href="/legal/cookies" className="hover:text-white">
+                Política de cookies
+              </Link>
+            </p>
             <p className="mt-2">
               © {new Date().getFullYear()} {propertyConfig.brand}.{" "}
               {t("footer.rights")}

@@ -8,8 +8,8 @@
 // 2. Si la URL NO tiene idioma (ej. "/") -> redirige al idioma
 //    del navegador del visitante, o al español por defecto.
 //
-// NO afecta a /admin ni a /api: esas rutas se excluyen abajo
-// en el "matcher" para que sigan funcionando igual que ahora.
+// NO afecta a /admin, /api ni /legal: esas rutas se excluyen
+// abajo en el "matcher" para que sigan funcionando igual.
 // ============================================================
 
 import { NextRequest, NextResponse } from "next/server";
@@ -55,10 +55,10 @@ export function proxy(req: NextRequest) {
   return NextResponse.redirect(url);
 }
 
-// El matcher EXCLUYE /admin, /api, archivos estáticos e imágenes.
+// El matcher EXCLUYE /admin, /api, /legal, archivos estáticos e imágenes.
 // Solo actúa sobre las páginas de cara al cliente.
 export const config = {
   matcher: [
-    "/((?!api|admin|_next/static|_next/image|images|favicon.ico|.*\\.).*)",
+    "/((?!api|admin|legal|_next/static|_next/image|images|favicon.ico|.*\\.).*)",
   ],
 };

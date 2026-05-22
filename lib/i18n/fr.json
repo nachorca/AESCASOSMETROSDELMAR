@@ -1,0 +1,100 @@
+{
+  "nav": {
+    "apartment": "L'appartement",
+    "services": "Équipements",
+    "location": "Emplacement",
+    "gallery": "Galerie",
+    "book": "Réserver"
+  },
+  "hero": {
+    "location": "El Campello · Alicante",
+    "title": "À quelques pas de la mer",
+    "subtitle": "Notre petit Los Roques",
+    "description": "Un appartement lumineux à seulement 50 mètres de la Méditerranée. Idéal pour les vacances, les escapades et le télétravail face à la mer.",
+    "bookNow": "Réserver",
+    "seeApartment": "Découvrir l'appartement",
+    "card1Title": "À 50 m de la mer 🌊",
+    "card1Text": "Traversez la promenade et vous êtes sur la plage. Un appartement lumineux bercé par la brise méditerranéenne.",
+    "card2Title": "Réservez en direct 💶",
+    "card2Text": "Jusqu'à 18 % moins cher que sur Airbnb. Sans commissions, avec une assistance directe par WhatsApp.",
+    "card3Title": "Fibre 1000 Mbps 📶",
+    "card3Text": "Parfait pour télétravailler face à la mer. Smart TV, climatisation, lave-vaisselle et cuisine entièrement équipée."
+  },
+  "quickCards": {
+    "capacityTitle": "Capacité",
+    "capacityText": "Jusqu'à 4 personnes",
+    "spaceTitle": "Espace",
+    "spaceText": "90 m² · 2 chambres",
+    "locationTitle": "Emplacement",
+    "locationText": "Front de mer d'El Campello",
+    "bookingTitle": "Réservation",
+    "bookingText": "Paiement en ligne sécurisé"
+  },
+  "directBooking": {
+    "label": "Réservation directe",
+    "title": "Pourquoi réserver ici plutôt que sur Airbnb ?",
+    "perk1": "Jusqu'à 18 % moins cher que sur Airbnb (sans commissions)",
+    "perk2": "Assistance directe de l'hôte par WhatsApp",
+    "perk3": "Arrivée flexible sans frais supplémentaires"
+  },
+  "amenities": {
+    "label": "Équipements",
+    "title": "Tout ce dont vous avez besoin",
+    "wifi": "WiFi fibre 1000 Mbps",
+    "ac": "Climatisation",
+    "heating": "Chauffage",
+    "kitchen": "Cuisine entièrement équipée",
+    "coffee": "Machine à café",
+    "washer": "Lave-linge",
+    "dishwasher": "Lave-vaisselle",
+    "tv": "Smart TV",
+    "terrace": "Terrasse",
+    "elevator": "Ascenseur",
+    "parking": "Parking",
+    "beach": "À 50 m de la plage"
+  },
+  "location": {
+    "label": "Emplacement",
+    "title": "El Campello, la promenade et la Méditerranée",
+    "description": "À quelques pas de la mer se situe à El Campello, l'un des coins les plus agréables de la côte d'Alicante, idéal pour profiter de la mer Méditerranée, du front de mer, des restaurants, de la plage et de séjours paisibles au bord de l'eau.",
+    "point1": "Promenade d'El Campello à 50 m",
+    "point2": "Plage et restaurants à proximité",
+    "point3": "Liaison directe en TRAM avec Alicante",
+    "point4": "Idéal pour les vacances, les escapades ou le télétravail"
+  },
+  "booking": {
+    "label": "Réservation",
+    "title": "Vérifiez les disponibilités et réservez votre séjour",
+    "description": "Calendrier en temps réel. Paiement par carte 100 % sécurisé. Confirmation immédiate par e-mail et WhatsApp.",
+    "securePaymentTitle": "Paiement sécurisé",
+    "securePaymentText": "Plateforme cryptée avec Stripe. Toutes les cartes acceptées.",
+    "instantTitle": "Confirmation immédiate",
+    "instantText": "Vous recevrez aussitôt un e-mail et un message WhatsApp avec tous les détails.",
+    "hostTitle": "Un hôte tout près de vous",
+    "hostText": "Je m'appelle Jose et je vous accompagne avant, pendant et après votre séjour."
+  },
+  "footer": {
+    "nickname": "Notre petit Los Roques",
+    "contactTitle": "Contact",
+    "whatsapp": "WhatsApp",
+    "email": "E-mail",
+    "legalTitle": "Mentions légales",
+    "registrationLabel": "Enregistrement touristique",
+    "legalNotice": "Mentions légales",
+    "privacy": "Politique de confidentialité",
+    "cookies": "Politique de cookies",
+    "salesTerms": "Conditions de vente",
+    "rights": "Tous droits réservés.",
+    "ownerAccess": "Accès propriétaire"
+  },
+  "payment": {
+    "successTitle": "Réservation reçue avec succès",
+    "successText1": "Votre paiement a bien été traité. Nous avons reçu votre demande de réservation.",
+    "successText2": "Nous vous contacterons sous peu pour confirmer tous les détails de votre séjour.",
+    "cancelledTitle": "Paiement annulé",
+    "cancelledText": "Le processus de paiement a été annulé et aucun débit n'a été effectué.",
+    "backHome": "Retour à l'accueil",
+    "cancelledText2": "Vous pouvez réessayer ou nous contacter directement par WhatsApp.",
+    "backBooking": "Retour à la réservation"
+  }
+}

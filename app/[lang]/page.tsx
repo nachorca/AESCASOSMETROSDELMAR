@@ -354,22 +354,22 @@ export default async function Home({
             </p>
             {propertyConfig.touristRegistrationNumber && (
               <p>
-                Registro turístico:{" "}
+                {t("footer.registrationLabel")}:{" "}
                 {propertyConfig.touristRegistrationNumber}
               </p>
             )}
             <p className="mt-3 flex flex-col gap-1">
               <Link href="/legal/aviso-legal" className="hover:text-white">
-                Aviso legal
+                {t("footer.legalNotice")}
               </Link>
               <Link href="/legal/privacidad" className="hover:text-white">
-                Política de privacidad
+                {t("footer.privacy")}
               </Link>
               <Link href="/legal/cookies" className="hover:text-white">
-                Política de cookies
+                {t("footer.cookies")}
               </Link>
               <Link href="/legal/condiciones-venta" className="hover:text-white">
-                Condiciones de venta
+                {t("footer.salesTerms")}
               </Link>
             </p>
             <p className="mt-2">

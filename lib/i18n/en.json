@@ -79,6 +79,11 @@
     "whatsapp": "WhatsApp",
     "email": "Email",
     "legalTitle": "Legal",
+    "registrationLabel": "Tourist registration",
+    "legalNotice": "Legal notice",
+    "privacy": "Privacy policy",
+    "cookies": "Cookie policy",
+    "salesTerms": "Terms of sale",
     "rights": "All rights reserved.",
     "ownerAccess": "Owner access"
   },

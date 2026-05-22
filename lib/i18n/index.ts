@@ -17,12 +17,14 @@ import { type Locale, defaultLocale } from "./config";
 
 import es from "./es.json";
 import en from "./en.json";
+import fr from "./fr.json";
 
 // Diccionarios disponibles. Cuando se añadan fr/de/nl, se
 // importan arriba y se registran aquí.
 const dictionaries: Record<string, Record<string, unknown>> = {
   es,
   en,
+  fr,
 };
 
 // Recorre un objeto anidado siguiendo una ruta tipo "hero.title"

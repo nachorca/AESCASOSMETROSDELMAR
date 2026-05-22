@@ -22,9 +22,6 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between text-white">
           <a href="#" className="font-semibold tracking-wide">
             {propertyConfig.brand}
-            <span className="hidden sm:inline text-white/60 font-normal ml-2">
-              · {propertyConfig.tagline}
-            </span>
           </a>
 
           <nav className="hidden md:flex items-center gap-8 text-sm text-white/85">
@@ -53,9 +50,13 @@ export default function Home() {
             {propertyConfig.city} · {propertyConfig.province}
           </p>
 
-          <h1 className="text-5xl md:text-8xl font-semibold mb-6">
+          <h1 className="text-5xl md:text-8xl font-semibold mb-4">
             {propertyConfig.heroTitle}
           </h1>
+
+          <p className="text-lg md:text-xl italic text-white/75 mb-8">
+            Nuestro pequeño Los Roques
+          </p>
 
           <p className="text-xl md:text-2xl text-white/90 mb-10">
             {propertyConfig.heroDescription}
@@ -279,7 +280,7 @@ export default function Home() {
             <p className="font-semibold text-white mb-2">
               {propertyConfig.brand}
             </p>
-            <p>{propertyConfig.tagline}</p>
+            <p className="italic text-white/50">Nuestro pequeño Los Roques</p>
             <p className="mt-2">
               {propertyConfig.city}, {propertyConfig.province},{" "}
               {propertyConfig.country}

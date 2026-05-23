@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 const heroImages = [
+  "/images/paseo-maritimo.png",
   "/images/portada.jpg",
   "/images/PORTADA 2.jpg",
   "/images/PHOTO-2024-06-17-21-07-17.jpg",

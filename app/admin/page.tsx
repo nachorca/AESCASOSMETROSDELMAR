@@ -66,6 +66,7 @@ export default function AdminPage() {
         source,
         guest_name: row.guest_name,
         guest_phone: row.guest_phone,
+        guest_email: row.guest_email,
       }),
     });
 
@@ -260,6 +261,8 @@ export default function AdminPage() {
       email: r.customer_email || "-",
       guest_name: r.customer_name || "",
       guest_phone: r.customer_phone || "",
+      customer_email: r.customer_email || "",
+      guest_email: "",
       stripe: r.stripe_session_id || "-",
       motivo: "-",
       manual: false,
@@ -287,6 +290,8 @@ export default function AdminPage() {
       email: e.guest_email || "-",
       guest_name: e.guest_name || "",
       guest_phone: e.guest_phone || "",
+      guest_email: e.guest_email || "",
+      customer_email: "",
       stripe: "-",
       motivo: e.summary || e.notes || "Reserva externa",
       manual: false,
@@ -309,6 +314,8 @@ export default function AdminPage() {
       email: "-",
       guest_name: b.customer_name || "",
       guest_phone: b.customer_phone || "",
+      customer_email: b.customer_email || "",
+      guest_email: "",
       stripe: "-",
       motivo: b.reason || "Bloqueo manual",
       manual: true,
@@ -721,9 +728,38 @@ export default function AdminPage() {
                         Guardar
                       </button>
                     </div>
-                    <div className="text-slate-500 text-xs mt-1 truncate">
-                      {r.email || "—"}
-                    </div>
+                    <input
+                      type="email"
+                      value={
+                        r.external
+                          ? r.guest_email ?? (r.email === "-" ? "" : r.email)
+                          : r.customer_email ?? (r.email === "-" ? "" : r.email)
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (r.external) {
+                          setExternalReservations((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, guest_email: value } : x
+                            )
+                          );
+                        } else if (r.manual) {
+                          setBlocks((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, customer_email: value } : x
+                            )
+                          );
+                        } else {
+                          setReservas((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, customer_email: value } : x
+                            )
+                          );
+                        }
+                      }}
+                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                      placeholder="Email"
+                    />
                     {r.manual ? (
                       <input
                         type="text"

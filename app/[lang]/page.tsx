@@ -281,7 +281,7 @@ export default async function Home({
           </p>
 
           <div className="bg-white rounded-[2rem] p-8 shadow-sm">
-            <AvailabilityCalendar />
+            <AvailabilityCalendar minStayText={t("booking.minStayBanner")} />
 
             <div className="grid md:grid-cols-3 gap-4 text-left mt-8">
               <div className="rounded-2xl bg-[#f7f4ee] p-5">

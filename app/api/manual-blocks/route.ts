@@ -71,9 +71,11 @@ export async function PUT(req: Request) {
 
   const body = await req.json();
 
+  // Al editar, ignoramos el propio bloqueo para que no choque consigo mismo.
   const availability = await checkAvailability(
     body.start_date,
-    body.end_date
+    body.end_date,
+    body.id
   );
 
   if (!availability.available) {

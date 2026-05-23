@@ -34,7 +34,13 @@ function overlaps(
   return startA < endB && endA > startB;
 }
 
-export async function checkAvailability(checkIn: string, checkOut: string) {
+export async function checkAvailability(
+  checkIn: string,
+  checkOut: string,
+  // Opcional: id de un bloqueo manual a ignorar (para poder EDITAR
+  // una reserva manual sin que choque consigo misma).
+  excludeManualBlockId?: string
+) {
   // Validación básica de entrada
   if (!checkIn || !checkOut) {
     return { available: false, reason: "Fechas no válidas" };
@@ -55,7 +61,7 @@ export async function checkAvailability(checkIn: string, checkOut: string) {
   // 2. Bloqueos manuales activos
   const blocksRes = await supabase
     .from("manual_blocks")
-    .select("start_date, end_date")
+    .select("id, start_date, end_date")
     .eq("active", true);
 
   // 3. Reservas externas (Airbnb / Booking) confirmadas
@@ -90,6 +96,9 @@ export async function checkAvailability(checkIn: string, checkOut: string) {
 
   // Comprobar contra bloqueos manuales
   for (const b of blocks) {
+    // Si estamos editando un bloqueo, lo ignoramos: no debe
+    // chocar consigo mismo.
+    if (excludeManualBlockId && b.id === excludeManualBlockId) continue;
     if (overlaps(checkIn, checkOut, b.start_date, b.end_date)) {
       return {
         available: false,

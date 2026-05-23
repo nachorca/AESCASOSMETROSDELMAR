@@ -28,10 +28,12 @@ export async function POST(req: Request) {
       ? {
           guest_name: body.guest_name || null,
           guest_phone: body.guest_phone || null,
+          guest_email: body.guest_email || null,
         }
       : {
           customer_name: body.guest_name || null,
           customer_phone: body.guest_phone || null,
+          customer_email: body.guest_email || null,
         };
 
   const { error } = await supabase

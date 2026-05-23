@@ -490,207 +490,34 @@ export default function AdminPage() {
             </button>
           </div>
 
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-fixed">
             <thead className="bg-slate-100 text-left">
               <tr>
-                <th className="p-3">Tipo</th>
-                <th className="p-3">Entrada</th>
-                <th className="p-3">Salida</th>
-                <th className="p-3">Huéspedes</th>
-                <th className="p-3">Pago</th>
-                <th className="p-3">Estado</th>
-                <th className="p-3">Check-in</th>
-                <th className="p-3">Limpieza</th>
-                <th className="p-3">Check-in Scan</th>
-                <th className="p-3">Importe</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Huésped</th>
-                <th className="p-3">Teléfono</th>
-                <th className="p-3">Motivo</th>
-                <th className="p-3">Acciones</th>
+                <th className="p-3 w-[14%]">Reserva</th>
+                <th className="p-3 w-[12%]">Fechas</th>
+                <th className="p-3 w-[14%]">Estado</th>
+                <th className="p-3 w-[16%]">Operativa</th>
+                <th className="p-3 w-[14%]">Check-in Scan</th>
+                <th className="p-3 w-[18%]">Contacto</th>
+                <th className="p-3 w-[12%]">Acciones</th>
               </tr>
             </thead>
-
             <tbody>
               {unifiedRows.map((r) => (
                 <tr
                   key={`${r.tipo}-${r.id}`}
-                  className={`border-t border-slate-200 ${
+                  className={`border-t border-slate-200 align-top ${
                     r.estado === "conflict" ? "bg-red-50" : ""
                   }`}
                 >
-                <td className="p-3">{r.tipo}</td>
+                  {/* RESERVA: tipo + huesped */}
                   <td className="p-3">
-                    {r.manual ? (
-                      <input
-                        type="date"
-                        value={r.entrada}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setBlocks((prev) =>
-                            prev.map((b) =>
-                              b.id === r.id ? { ...b, start_date: value } : b
-                            )
-                          );
-                        }}
-                        className="rounded-lg border border-slate-300 px-3 py-2"
-                      />
-                    ) : (
-                      r.entrada
-                    )}
-                  </td>
-
-                  <td className="p-3">
-                    {r.manual ? (
-                      <input
-                        type="date"
-                        value={r.salida}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setBlocks((prev) =>
-                            prev.map((b) =>
-                              b.id === r.id ? { ...b, end_date: value } : b
-                            )
-                          );
-                        }}
-                        className="rounded-lg border border-slate-300 px-3 py-2"
-                      />
-                    ) : (
-                      r.salida
-                    )}
-                  </td>
-                  <td className="p-3">{r.huespedes}</td>
-                  <td className="p-3">{r.pago}</td>
-                  <td className="p-3">
-                    {r.estado === "conflict" ? (
-                      <span className="rounded-lg bg-red-600 text-white px-2 py-1 text-xs font-semibold">
-                        ⚠️ CONFLICTO — revisar
-                      </span>
-                    ) : (
-                      r.estado
-                    )}
-                  </td>
-
-                  <td className="p-3">
-                    <select
-                      value={r.checkin_status}
-                      onChange={(e) => {
-                        const value = e.target.value;
-
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="rounded-lg border border-slate-300 px-2 py-1 text-sm"
-                    >
-                      <option value="pending">Pendiente</option>
-                      <option value="checkin_done">Check-in realizado</option>
-                      <option value="checkout_done">Check-out realizado</option>
-                    </select>
-                  </td>
-
-                  <td className="p-3">
-                    <select
-                      value={r.cleaning_status}
-                      onChange={(e) => {
-                        const value = e.target.value;
-
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="rounded-lg border border-slate-300 px-2 py-1 text-sm"
-                    >
-                      <option value="pending">Pendiente</option>
-                      <option value="cleaning">Limpiando</option>
-                      <option value="ready">Listo</option>
-                    </select>
-                  </td>
-
-                  <td className="p-3">
-                    <div className="flex flex-col gap-2">
-                      {r.checkinscan_status === "not_sent" ? (
-                        <>
-                          <button
-                            className="rounded-xl bg-blue-600 text-white px-3 py-2 text-sm"
-                          >
-                            Enviar
-                          </button>
-
-                          <a
-                            href={buildWhatsappUrl(r)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="rounded-xl bg-green-600 text-white px-3 py-2 text-sm text-center"
-                          >
-                            Enviar WhatsApp
-                          </a>
-                        </>
-                      ) : r.checkinscan_status === "sent" ? (
-                        <span className="rounded-lg bg-amber-100 text-amber-700 px-3 py-2 text-sm">
-                          Enviado
-                        </span>
-                      ) : (
-                        <span className="rounded-lg bg-emerald-100 text-emerald-700 px-3 py-2 text-sm">
-                          Completado
-                        </span>
-                      )}
-                    </div>
-                  </td>
-
-                  <td className="p-3">
-                    <button
-                      onClick={() =>
-                        actualizarEstadoOperativo(r)
-                      }
-                      className="rounded-xl bg-slate-900 text-white px-4 py-2 text-sm"
-                    >
-                      Guardar estado
-                    </button>
-                  </td>
-
-                  <td className="p-3">{r.importe}</td>
-                  <td className="p-3">{r.email}</td>
-
-                  <td className="p-3">
+                    <div className="font-medium">{r.tipo}</div>
                     <input
                       type="text"
                       value={r.guest_name}
                       onChange={(e) => {
                         const value = e.target.value;
-
                         if (r.external) {
                           setExternalReservations((prev) =>
                             prev.map((x) =>
@@ -711,19 +538,171 @@ export default function AdminPage() {
                           );
                         }
                       }}
-                      className="rounded-lg border border-slate-300 px-3 py-2 min-w-[160px]"
+                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
                       placeholder="Nombre"
                     />
                   </td>
 
+                  {/* FECHAS: entrada + salida */}
                   <td className="p-3">
-                    <div className="flex gap-2">
+                    {r.manual ? (
+                      <input
+                        type="date"
+                        value={r.entrada}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setBlocks((prev) =>
+                            prev.map((b) =>
+                              b.id === r.id ? { ...b, start_date: value } : b
+                            )
+                          );
+                        }}
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                      />
+                    ) : (
+                      <div>{r.entrada}</div>
+                    )}
+                    {r.manual ? (
+                      <input
+                        type="date"
+                        value={r.salida}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setBlocks((prev) =>
+                            prev.map((b) =>
+                              b.id === r.id ? { ...b, end_date: value } : b
+                            )
+                          );
+                        }}
+                        className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                      />
+                    ) : (
+                      <div className="text-slate-500">{r.salida}</div>
+                    )}
+                  </td>
+
+                  {/* ESTADO: estado + pago + importe */}
+                  <td className="p-3">
+                    {r.estado === "conflict" ? (
+                      <span className="rounded-lg bg-red-600 text-white px-2 py-1 text-xs font-semibold">
+                        ⚠️ CONFLICTO
+                      </span>
+                    ) : (
+                      <div className="font-medium">{r.estado}</div>
+                    )}
+                    <div className="text-slate-500 text-xs mt-1">
+                      {r.pago || "—"}{r.importe ? ` · ${r.importe}` : ""}
+                    </div>
+                  </td>
+
+                  {/* OPERATIVA: check-in + limpieza */}
+                  <td className="p-3">
+                    <select
+                      value={r.checkin_status}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (r.external) {
+                          setExternalReservations((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, checkin_status: value } : x
+                            )
+                          );
+                        } else if (r.manual) {
+                          setBlocks((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, checkin_status: value } : x
+                            )
+                          );
+                        } else {
+                          setReservas((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, checkin_status: value } : x
+                            )
+                          );
+                        }
+                      }}
+                      className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                    >
+                      <option value="pending">Check-in: Pendiente</option>
+                      <option value="checkin_done">Check-in realizado</option>
+                      <option value="checkout_done">Check-out realizado</option>
+                    </select>
+                    <select
+                      value={r.cleaning_status}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (r.external) {
+                          setExternalReservations((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, cleaning_status: value } : x
+                            )
+                          );
+                        } else if (r.manual) {
+                          setBlocks((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, cleaning_status: value } : x
+                            )
+                          );
+                        } else {
+                          setReservas((prev) =>
+                            prev.map((x) =>
+                              x.id === r.id ? { ...x, cleaning_status: value } : x
+                            )
+                          );
+                        }
+                      }}
+                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                    >
+                      <option value="pending">Limpieza: Pendiente</option>
+                      <option value="cleaning">Limpiando</option>
+                      <option value="ready">Listo</option>
+                    </select>
+                    <button
+                      onClick={() => actualizarEstadoOperativo(r)}
+                      className="mt-1 rounded-lg bg-slate-900 text-white px-3 py-1 text-xs w-full"
+                    >
+                      Guardar estado
+                    </button>
+                  </td>
+
+                  {/* CHECK-IN SCAN */}
+                  <td className="p-3">
+                    <div className="flex flex-col gap-2">
+                      {r.checkinscan_status === "not_sent" ? (
+                        <>
+                          <button className="rounded-lg bg-blue-600 text-white px-3 py-2 text-sm">
+                            Enviar
+                          </button>
+                          
+                            <a
+                            href={buildWhatsappUrl(r)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="rounded-lg bg-green-600 text-white px-3 py-2 text-sm text-center"
+                          >
+                            Enviar WhatsApp
+                          </a>
+                        </>
+                      ) : r.checkinscan_status === "sent" ? (
+                        <span className="rounded-lg bg-amber-100 text-amber-700 px-3 py-2 text-sm text-center">
+                          Enviado
+                        </span>
+                      ) : (
+                        <span className="rounded-lg bg-emerald-100 text-emerald-700 px-3 py-2 text-sm text-center">
+                          Completado
+                        </span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* CONTACTO: telefono + email + motivo */}
+                  <td className="p-3">
+                    <div className="flex gap-1">
                       <input
                         type="tel"
                         value={r.guest_phone}
                         onChange={(e) => {
                           const value = e.target.value;
-
                           if (r.external) {
                             setExternalReservations((prev) =>
                               prev.map((x) =>
@@ -744,20 +723,19 @@ export default function AdminPage() {
                             );
                           }
                         }}
-                        className="rounded-lg border border-slate-300 px-3 py-2 min-w-[150px]"
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
                         placeholder="+34..."
                       />
-
                       <button
                         onClick={() => actualizarDatosHuesped(r)}
-                        className="rounded-lg bg-slate-900 text-white px-3 py-2 text-sm"
+                        className="rounded-lg bg-slate-900 text-white px-2 py-1 text-xs shrink-0"
                       >
                         Guardar
                       </button>
                     </div>
-                  </td>
-
-                  <td className="p-3">
+                    <div className="text-slate-500 text-xs mt-1 truncate">
+                      {r.email || "—"}
+                    </div>
                     {r.manual ? (
                       <input
                         type="text"
@@ -770,25 +748,27 @@ export default function AdminPage() {
                             )
                           );
                         }}
-                        className="rounded-lg border border-slate-300 px-3 py-2 w-full"
+                        className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                        placeholder="Motivo"
                       />
                     ) : (
-                      r.motivo
+                      <div className="text-slate-400 text-xs mt-1">{r.motivo}</div>
                     )}
                   </td>
+
+                  {/* ACCIONES */}
                   <td className="p-3">
                     {r.manual ? (
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-1">
                         <button
                           onClick={() => actualizarBloqueoManual(r)}
-                          className="rounded-lg bg-slate-900 text-white px-4 py-2"
+                          className="rounded-lg bg-slate-900 text-white px-3 py-2 text-sm"
                         >
                           Guardar
                         </button>
-
                         <button
                           onClick={() => borrarBloqueo(r.id)}
-                          className="rounded-lg bg-red-600 text-white px-4 py-2"
+                          className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm"
                         >
                           Borrar
                         </button>
@@ -804,7 +784,7 @@ export default function AdminPage() {
 
               {!unifiedRows.length && (
                 <tr>
-                  <td className="p-6 text-slate-500" colSpan={10}>
+                  <td className="p-6 text-slate-500" colSpan={7}>
                     No hay reservas todavía.
                   </td>
                 </tr>

@@ -71,7 +71,8 @@
     "instantTitle": "Confirmation immédiate",
     "instantText": "Vous recevrez aussitôt un e-mail et un message WhatsApp avec tous les détails.",
     "hostTitle": "Un hôte tout près de vous",
-    "hostText": "Je m'appelle Jose et je vous accompagne avant, pendant et après votre séjour."
+    "hostText": "Je m'appelle Jose et je vous accompagne avant, pendant et après votre séjour.",
+    "minStayBanner": "Pour les dates sélectionnées, le séjour minimum est de {n} nuits. Ajustez votre date de départ pour réserver."
   },
   "footer": {
     "nickname": "Notre petit Los Roques",

@@ -71,7 +71,8 @@
     "instantTitle": "Onmiddellijke bevestiging",
     "instantText": "U ontvangt direct een e-mail en een WhatsApp-bericht met alle details.",
     "hostTitle": "Een gastheer dicht bij u",
-    "hostText": "Ik ben Jose en ik help u voor, tijdens en na uw verblijf."
+    "hostText": "Ik ben Jose en ik help u voor, tijdens en na uw verblijf.",
+    "minStayBanner": "Voor de geselecteerde data is het minimumverblijf {n} nachten. Pas je vertrekdatum aan om te boeken."
   },
   "footer": {
     "nickname": "Ons kleine Los Roques",

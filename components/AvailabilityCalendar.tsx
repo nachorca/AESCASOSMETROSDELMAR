@@ -57,7 +57,7 @@ function getMonthData(base: Date, offset: number) {
   };
 }
 
-export default function AvailabilityCalendar() {
+export default function AvailabilityCalendar({ minStayText }: { minStayText?: string }) {
   const [blocked, setBlocked] = useState<BlockedDate[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkIn, setCheckIn] = useState<string | null>(null);
@@ -424,8 +424,7 @@ export default function AvailabilityCalendar() {
 
         {!estanciaPermitida && minNochesRegla > 0 && (
           <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 text-sm font-medium">
-            Para las fechas seleccionadas, la estancia mínima es de {minNochesRegla} noches.
-            Ajusta tu salida para poder reservar.
+            {(minStayText || "Para las fechas seleccionadas, la estancia mínima es de {n} noches. Ajusta tu salida para poder reservar.").replace("{n}", String(minNochesRegla))}
           </div>
         )}
 

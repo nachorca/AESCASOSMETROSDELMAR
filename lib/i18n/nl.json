@@ -72,7 +72,12 @@
     "instantText": "U ontvangt direct een e-mail en een WhatsApp-bericht met alle details.",
     "hostTitle": "Een gastheer dicht bij u",
     "hostText": "Ik ben Jose en ik help u voor, tijdens en na uw verblijf.",
-    "minStayBanner": "Voor de geselecteerde data is het minimumverblijf {n} nachten. Pas je vertrekdatum aan om te boeken."
+    "minStayBanner": "Voor de geselecteerde data is het minimumverblijf {n} nachten. Pas je vertrekdatum aan om te boeken.",
+    "phoneLabel": "Telefoon / WhatsApp",
+    "phoneRequired": "verplicht",
+    "emailLabel": "E-mail",
+    "emailOptional": "optioneel",
+    "phoneBanner": "Vul je telefoonnummer in om door te gaan met de reservering. We hebben het nodig om je bevestiging via WhatsApp te sturen."
   },
   "footer": {
     "nickname": "Ons kleine Los Roques",

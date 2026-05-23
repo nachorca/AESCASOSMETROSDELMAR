@@ -72,7 +72,12 @@
     "instantText": "Vous recevrez aussitôt un e-mail et un message WhatsApp avec tous les détails.",
     "hostTitle": "Un hôte tout près de vous",
     "hostText": "Je m'appelle Jose et je vous accompagne avant, pendant et après votre séjour.",
-    "minStayBanner": "Pour les dates sélectionnées, le séjour minimum est de {n} nuits. Ajustez votre date de départ pour réserver."
+    "minStayBanner": "Pour les dates sélectionnées, le séjour minimum est de {n} nuits. Ajustez votre date de départ pour réserver.",
+    "phoneLabel": "Téléphone / WhatsApp",
+    "phoneRequired": "obligatoire",
+    "emailLabel": "E-mail",
+    "emailOptional": "facultatif",
+    "phoneBanner": "Saisissez votre numéro de téléphone pour continuer la réservation. Nous en avons besoin pour vous envoyer la confirmation par WhatsApp."
   },
   "footer": {
     "nickname": "Notre petit Los Roques",

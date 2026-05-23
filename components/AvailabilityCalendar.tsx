@@ -64,6 +64,8 @@ export default function AvailabilityCalendar() {
   const [checkOut, setCheckOut] = useState<string | null>(null);
   const [guests, setGuests] = useState(2);
   const [bookingError, setBookingError] = useState("");
+  const [estanciaPermitida, setEstanciaPermitida] = useState(true);
+  const [minNochesRegla, setMinNochesRegla] = useState(0);
   const [dailyPrices, setDailyPrices] = useState<Record<string, number>>({});
   const [weeklyDiscount, setWeeklyDiscount] = useState(0);
   const [monthlyDiscount, setMonthlyDiscount] = useState(0);
@@ -136,6 +138,32 @@ export default function AvailabilityCalendar() {
 
     loadAvailability();
   }, []);
+
+  // Consulta al motor de tarifas si la estancia elegida es válida
+  useEffect(() => {
+    if (!checkIn || !checkOut) {
+      setEstanciaPermitida(true);
+      setMinNochesRegla(0);
+      return;
+    }
+    const n = nightsBetween(checkIn, checkOut);
+    fetch(`/api/check-estancia?checkIn=${checkIn}&nights=${n}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.permitida === false) {
+          setEstanciaPermitida(false);
+          setMinNochesRegla(data.minNights || 0);
+        } else {
+          setEstanciaPermitida(true);
+          setMinNochesRegla(0);
+        }
+      })
+      .catch(() => {
+        // Si falla la consulta, no bloqueamos: el servidor valida igual al pagar
+        setEstanciaPermitida(true);
+        setMinNochesRegla(0);
+      });
+  }, [checkIn, checkOut]);
 
   function rangeHasBlocked(start: string, end: string) {
     const a = new Date(start + "T00:00:00");
@@ -394,6 +422,13 @@ export default function AvailabilityCalendar() {
           </div>
         </div>
 
+        {!estanciaPermitida && minNochesRegla > 0 && (
+          <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 text-sm font-medium">
+            Para las fechas seleccionadas, la estancia mínima es de {minNochesRegla} noches.
+            Ajusta tu salida para poder reservar.
+          </div>
+        )}
+
         {bookingError && (
           <div className="mb-4 rounded-2xl bg-red-100 border border-red-200 text-red-700 px-4 py-3 text-sm">
             {bookingError}
@@ -404,9 +439,9 @@ export default function AvailabilityCalendar() {
           <button
             type="button"
             onClick={handlePayment}
-            disabled={!checkIn || !checkOut}
+            disabled={!checkIn || !checkOut || !estanciaPermitida}
             className={`inline-flex justify-center rounded-2xl px-6 py-3 font-medium ${
-              checkIn && checkOut
+              checkIn && checkOut && estanciaPermitida
                 ? "bg-slate-900 text-white"
                 : "bg-slate-200 text-slate-400 cursor-not-allowed"
             }`}

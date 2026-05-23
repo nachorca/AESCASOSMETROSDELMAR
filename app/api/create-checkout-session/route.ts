@@ -2,14 +2,14 @@
 // ============================================================
 // Crea la sesión de pago de Stripe para una reserva directa
 // ============================================================
-// Antes de crear la sesión de pago, valida la disponibilidad
-// con checkAvailability (que comprueba reservas directas,
-// bloqueos manuales y reservas externas de Airbnb/Booking).
-// La revalidación definitiva se hace en el webhook de Stripe.
+// SEGURIDAD: el precio se calcula SIEMPRE en el servidor con
+// calcularPrecio(). NUNCA se usa el importe que manda el
+// navegador — así nadie puede manipular el precio a pagar.
 // ============================================================
 
 import Stripe from "stripe";
 import { checkAvailability } from "@/lib/checkAvailability";
+import { calcularPrecio } from "@/lib/calcularPrecio";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -17,18 +17,25 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
+    // 1. Disponibilidad
     const availability = await checkAvailability(body.checkIn, body.checkOut);
-
     if (!availability.available) {
       return Response.json(
-        {
-          ok: false,
-          error: availability.reason,
-        },
+        { ok: false, error: availability.reason },
         { status: 409 }
       );
     }
 
+    // 2. Precio REAL calculado en el servidor (ignora body.amount)
+    const precio = await calcularPrecio(body.checkIn, body.checkOut);
+    if (!precio.ok) {
+      return Response.json(
+        { ok: false, error: precio.error },
+        { status: 400 }
+      );
+    }
+
+    // 3. Sesión de pago de Stripe con el importe seguro
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
@@ -41,7 +48,7 @@ export async function POST(req: Request) {
               description:
                 "Reserva del apartamento turístico en El Campello",
             },
-            unit_amount: body.amount || 10000,
+            unit_amount: precio.totalCents,
           },
           quantity: 1,
         },
@@ -59,16 +66,10 @@ export async function POST(req: Request) {
       },
     });
 
-    return Response.json({
-      ok: true,
-      url: session.url,
-    });
+    return Response.json({ ok: true, url: session.url });
   } catch {
     return Response.json(
-      {
-        ok: false,
-        error: "No se pudo crear la sesión de pago",
-      },
+      { ok: false, error: "No se pudo crear la sesión de pago" },
       { status: 500 }
     );
   }

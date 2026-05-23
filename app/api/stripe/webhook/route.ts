@@ -71,8 +71,13 @@ export async function POST(req: Request) {
           guests: Number(session.metadata?.guests || 2),
           amount_total: session.amount_total,
           currency: session.currency,
-          customer_email: session.customer_details?.email,
+          customer_email:
+            session.metadata?.guestEmail ||
+            session.customer_details?.email,
           customer_name: session.customer_details?.name,
+          customer_phone:
+            session.metadata?.guestPhone ||
+            session.customer_details?.phone,
           internal_notes:
             "CONFLICTO: fechas ya ocupadas al confirmar el pago. " +
             "Revisar y reembolsar al cliente.",
@@ -95,8 +100,13 @@ export async function POST(req: Request) {
       guests: Number(session.metadata?.guests || 2),
       amount_total: session.amount_total,
       currency: session.currency,
-      customer_email: session.customer_details?.email,
+      customer_email:
+        session.metadata?.guestEmail ||
+        session.customer_details?.email,
       customer_name: session.customer_details?.name,
+      customer_phone:
+        session.metadata?.guestPhone ||
+        session.customer_details?.phone,
     });
 
     if (error) {

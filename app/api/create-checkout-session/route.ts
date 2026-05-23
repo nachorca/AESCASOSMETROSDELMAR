@@ -63,6 +63,8 @@ export async function POST(req: Request) {
         checkIn: body.checkIn || "",
         checkOut: body.checkOut || "",
         guests: String(body.guests || ""),
+        guestPhone: body.guestPhone || "",
+        guestEmail: body.guestEmail || "",
       },
     });
 

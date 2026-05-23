@@ -57,7 +57,21 @@ function getMonthData(base: Date, offset: number) {
   };
 }
 
-export default function AvailabilityCalendar({ minStayText }: { minStayText?: string }) {
+type FormText = {
+  phoneLabel: string;
+  phoneRequired: string;
+  emailLabel: string;
+  emailOptional: string;
+  phoneBanner: string;
+};
+
+export default function AvailabilityCalendar({
+  minStayText,
+  formText,
+}: {
+  minStayText?: string;
+  formText?: FormText;
+}) {
   const [blocked, setBlocked] = useState<BlockedDate[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkIn, setCheckIn] = useState<string | null>(null);
@@ -65,6 +79,8 @@ export default function AvailabilityCalendar({ minStayText }: { minStayText?: st
   const [guests, setGuests] = useState(2);
   const [bookingError, setBookingError] = useState("");
   const [estanciaPermitida, setEstanciaPermitida] = useState(true);
+  const [guestPhone, setGuestPhone] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
   const [minNochesRegla, setMinNochesRegla] = useState(0);
   const [dailyPrices, setDailyPrices] = useState<Record<string, number>>({});
   const [weeklyDiscount, setWeeklyDiscount] = useState(0);
@@ -249,6 +265,8 @@ export default function AvailabilityCalendar({ minStayText }: { minStayText?: st
         checkIn,
         checkOut,
         guests,
+        guestPhone,
+        guestEmail,
         amount: total * 100,
       }),
     });
@@ -396,6 +414,37 @@ export default function AvailabilityCalendar({ minStayText }: { minStayText?: st
           </div>
         </div>
 
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          <div>
+            <p className="text-slate-500 mb-1 text-sm">
+              {formText?.phoneLabel || "Teléfono / WhatsApp"}{" "}
+              <span className="text-red-500">*</span>
+            </p>
+            <input
+              type="tel"
+              value={guestPhone}
+              onChange={(e) => setGuestPhone(e.target.value)}
+              placeholder="+34 600 000 000"
+              className="w-full rounded-xl border border-slate-300 px-3 py-2 bg-white"
+            />
+          </div>
+          <div>
+            <p className="text-slate-500 mb-1 text-sm">
+              {formText?.emailLabel || "Email"}{" "}
+              <span className="text-slate-400">
+                ({formText?.emailOptional || "opcional"})
+              </span>
+            </p>
+            <input
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              placeholder="tucorreo@ejemplo.com"
+              className="w-full rounded-xl border border-slate-300 px-3 py-2 bg-white"
+            />
+          </div>
+        </div>
+
         <div className="rounded-2xl bg-white p-5 mb-6 border border-slate-200">
           <div className="flex justify-between mb-2">
             <span>Precio estancia × {nights} noches</span>
@@ -434,13 +483,22 @@ export default function AvailabilityCalendar({ minStayText }: { minStayText?: st
           </div>
         )}
 
+        {checkIn && checkOut && estanciaPermitida && !guestPhone.trim() && (
+          <div className="mb-4 rounded-2xl bg-amber-50 border border-amber-300 text-amber-800 px-4 py-3 text-sm font-medium">
+            {formText?.phoneBanner ||
+              "Introduce tu teléfono para continuar con la reserva."}
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row gap-3">
           <button
             type="button"
             onClick={handlePayment}
-            disabled={!checkIn || !checkOut || !estanciaPermitida}
+            disabled={
+              !checkIn || !checkOut || !estanciaPermitida || !guestPhone.trim()
+            }
             className={`inline-flex justify-center rounded-2xl px-6 py-3 font-medium ${
-              checkIn && checkOut && estanciaPermitida
+              checkIn && checkOut && estanciaPermitida && guestPhone.trim()
                 ? "bg-slate-900 text-white"
                 : "bg-slate-200 text-slate-400 cursor-not-allowed"
             }`}

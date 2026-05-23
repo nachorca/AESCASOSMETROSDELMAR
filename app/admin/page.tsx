@@ -219,6 +219,23 @@ export default function AdminPage() {
     await cargarDatos();
   }
 
+  async function borrarReservaStripe(id: string) {
+    const res = await fetch("/api/admin/reservas", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": password,
+      },
+      body: JSON.stringify({ id }),
+    });
+    const data = await res.json();
+    if (!data.ok) {
+      setError(data.error || "Error borrando la reserva");
+      return;
+    }
+    await cargarDatos();
+  }
+
   function buildWhatsappUrl(row: any) {
     const message = `Hola, para completar el registro obligatorio de viajeros de tu reserva en A escasos metros del mar, por favor accede al siguiente enlace de Check-in Scan: ${row.checkinscan_url || "ENLACE_CHECKIN_SCAN_PENDIENTE"}`;
 
@@ -627,36 +644,7 @@ export default function AdminPage() {
                       <option value="checkin_done">Check-in realizado</option>
                       <option value="checkout_done">Check-out realizado</option>
                     </select>
-                    <select
-                      value={r.cleaning_status}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, cleaning_status: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                    >
-                      <option value="pending">Limpieza: Pendiente</option>
-                      <option value="cleaning">Limpiando</option>
-                      <option value="ready">Listo</option>
-                    </select>
+
                     <button
                       onClick={() => actualizarEstadoOperativo(r)}
                       className="mt-1 rounded-lg bg-slate-900 text-white px-3 py-1 text-xs w-full"
@@ -776,7 +764,20 @@ export default function AdminPage() {
                     ) : r.external ? (
                       <span className="text-slate-400">Externa</span>
                     ) : (
-                      <span className="text-slate-400">Stripe</span>
+                      <button
+                        onClick={() => {
+                          if (
+                            confirm(
+                              "¿Seguro que quieres borrar esta reserva? Esta acción no se puede deshacer y liberará las fechas en el calendario."
+                            )
+                          ) {
+                            borrarReservaStripe(r.id);
+                          }
+                        }}
+                        className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm"
+                      >
+                        Borrar
+                      </button>
                     )}
                   </td>
                 </tr>

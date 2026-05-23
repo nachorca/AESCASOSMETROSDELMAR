@@ -531,7 +531,17 @@ export default function AdminPage() {
                 <tr
                   key={`${r.tipo}-${r.id}`}
                   className={`border-t border-slate-200 align-top ${
-                    r.estado === "conflict" ? "bg-red-50" : ""
+                    r.estado === "conflict"
+                      ? "bg-red-50"
+                      : r.tipo === "Reserva Booking"
+                      ? "bg-blue-100"
+                      : r.tipo === "Reserva Airbnb"
+                      ? "bg-pink-100"
+                      : r.tipo === "Reserva Stripe"
+                      ? "bg-green-100"
+                      : r.tipo === "Reserva manual"
+                      ? "bg-orange-100"
+                      : ""
                   }`}
                 >
                   {/* RESERVA: tipo + huesped */}
@@ -665,7 +675,7 @@ export default function AdminPage() {
                     <div className="flex flex-col gap-2">
                       {r.checkinscan_status === "not_sent" ? (
                         <>
-                          <button className="rounded-lg bg-blue-600 text-white px-3 py-2 text-sm">
+                          <button className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm">
                             Enviar
                           </button>
                           
@@ -673,7 +683,7 @@ export default function AdminPage() {
                             href={buildWhatsappUrl(r)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="rounded-lg bg-green-600 text-white px-3 py-2 text-sm text-center"
+                            className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm text-center"
                           >
                             Enviar WhatsApp
                           </a>

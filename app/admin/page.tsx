@@ -1,6 +1,7 @@
 "use client";
 
 import AdminCalendar from "@/components/AdminCalendar";
+import AdminRateRules from "@/components/AdminRateRules";
 
 import { useState } from "react";
 
@@ -418,6 +419,8 @@ export default function AdminPage() {
             </button>
           </div>
         </div>
+
+        <AdminRateRules password={password} />
 
         <div className="rounded-2xl bg-white p-5 border border-slate-200 mb-8">
           <h2 className="text-xl font-semibold mb-4">Crear reserva manual</h2>

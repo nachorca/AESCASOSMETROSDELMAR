@@ -88,7 +88,7 @@ export default function AvailabilityCalendar({
 
   const today = new Date();
   const baseMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  const monthsToShow = 12;
+  const monthsToShow = 24;
 
   const blockedSet = useMemo(() => expandBlockedDates(blocked), [blocked]);
 

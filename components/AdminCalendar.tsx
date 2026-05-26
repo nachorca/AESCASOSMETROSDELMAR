@@ -119,105 +119,156 @@ export default function AdminCalendar({
   }
 
   return (
-    <div className="w-full rounded-3xl bg-white border border-slate-200 p-4 overflow-hidden">
-      <div className="max-h-[720px] overflow-y-auto pr-1 space-y-10">
-        {Array.from({ length: monthsToShow }, (_, offset) => {
-          const monthData = getMonthData(baseMonth, offset);
+    <div className="w-full rounded-3xl bg-white border border-slate-200 p-4">
+      {/* Oculta las flechitas del input numerico (Chrome, Safari y Firefox).
+          El campo sigue siendo editable a mano con el teclado. */}
+      <style jsx>{`
+        input[type="number"].precio-noche::-webkit-outer-spin-button,
+        input[type="number"].precio-noche::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type="number"].precio-noche {
+          -moz-appearance: textfield;
+          appearance: textfield;
+        }
+      `}</style>
 
-          return (
-            <div key={`${monthData.year}-${monthData.month}`} className="w-full">
-              <h3 className="text-xl font-semibold capitalize mb-4 sticky top-0 bg-white z-20 py-3 border-b border-slate-100">
-                {monthData.monthName}
-              </h3>
+      {/* Scroll horizontal: los meses van en fila, se desplazan de izquierda a derecha */}
+      <div className="overflow-x-auto pb-3">
+        <div className="flex gap-6">
+          {Array.from({ length: monthsToShow }, (_, offset) => {
+            const monthData = getMonthData(baseMonth, offset);
 
-              <div className="grid grid-cols-7 gap-0 text-sm text-center mb-0 text-slate-500 sticky top-[58px] bg-white z-10 border-b border-slate-200">
-                {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((d) => (
-                  <div key={d} className="py-3 border-r border-slate-200 last:border-r-0">
-                    {d}
-                  </div>
-                ))}
-              </div>
+            return (
+              <div
+                key={`${monthData.year}-${monthData.month}`}
+                className="shrink-0 w-[320px]"
+              >
+                <h3 className="text-base font-semibold capitalize mb-2 py-2 border-b border-slate-100">
+                  {monthData.monthName}
+                </h3>
 
-              <div className="grid grid-cols-7 gap-0 text-sm border-l border-t border-slate-200">
-                {Array.from({ length: monthData.startOffset }).map((_, i) => (
-                  <div key={`empty-${i}`} className="min-h-[145px] border-r border-b border-slate-200 bg-slate-50" />
-                ))}
-
-                {Array.from({ length: monthData.daysInMonth }, (_, i) => i + 1).map((day) => {
-                  const dateKey = toDateKey(
-                    new Date(monthData.year, monthData.month, day)
-                  );
-
-                  const dayReservations = getReservationsForDate(dateKey);
-                  const checkOutsToday = reservations.filter((r) => r.salida === dateKey);
-                  const price = prices[dateKey] ?? 130;
-
-                  return (
+                <div className="grid grid-cols-7 gap-0 text-[10px] text-center text-slate-500 border-b border-slate-200">
+                  {["L", "M", "X", "J", "V", "S", "D"].map((d, i) => (
                     <div
-                      key={dateKey}
-                      className="relative min-h-[120px] border-r border-b border-slate-200 bg-white p-1.5 overflow-hidden"
+                      key={`${d}-${i}`}
+                      className="py-1.5 border-r border-slate-200 last:border-r-0"
                     >
-                      <div className="font-semibold text-slate-900 mb-2">{day}</div>
-
-                      <div className="space-y-1 min-h-[42px]">
-                        {dayReservations.map((r) => {
-                          const startsHere = isStart(dateKey, r.entrada);
-                          const previousDate = addDays(dateKey, -1);
-                          const continuesFromPrevious = isInside(previousDate, r.entrada, r.salida);
-
-                          return (
-                            <div
-                              key={`${r.id}-${dateKey}`}
-                              className={`${getColor(r.tipo)} h-7 text-white text-xs flex items-center px-2 ${
-                                startsHere ? "rounded-l-full" : ""
-                              } ${
-                                !isInside(addDays(dateKey, 1), r.entrada, r.salida)
-                                  ? "rounded-r-full"
-                                  : ""
-                              } ${continuesFromPrevious ? "-ml-3" : ""}`}
-                            >
-                              {startsHere ? r.tipo.replace("Reserva ", "") : ""}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {checkOutsToday.length > 0 && (
-                        <div className="mt-2 rounded-lg bg-slate-100 px-2 py-1 text-[11px] text-slate-600">
-                          Salida 10:00
-                        </div>
-                      )}
-
-                      <div className="mt-3">
-                        <label className="block text-[11px] mb-1 text-slate-500">
-                          Precio noche
-                        </label>
-                        <input
-                          type="number"
-                          value={price}
-                          onChange={(e) =>
-                            setPrices((prev) => ({
-                              ...prev,
-                              [dateKey]: Number(e.target.value),
-                            }))
-                          }
-                          onBlur={(e) =>
-                            savePrice(dateKey, Number(e.target.value))
-                          }
-                          className="w-full min-w-0 rounded-lg border border-slate-300 px-1.5 py-1 text-slate-900 text-xs"
-                        />
-                        {savingDate === dateKey && (
-                          <p className="text-[11px] mt-1 text-slate-500">Guardando...</p>
-                        )}
-                      </div>
+                      {d}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
+
+                <div className="grid grid-cols-7 gap-0 text-sm border-l border-t border-slate-200">
+                  {Array.from({ length: monthData.startOffset }).map((_, i) => (
+                    <div
+                      key={`empty-${i}`}
+                      className="min-h-[78px] border-r border-b border-slate-200 bg-slate-50"
+                    />
+                  ))}
+
+                  {Array.from(
+                    { length: monthData.daysInMonth },
+                    (_, i) => i + 1
+                  ).map((day) => {
+                    const dateKey = toDateKey(
+                      new Date(monthData.year, monthData.month, day)
+                    );
+
+                    const dayReservations = getReservationsForDate(dateKey);
+                    const checkOutsToday = reservations.filter(
+                      (r) => r.salida === dateKey
+                    );
+                    const price = prices[dateKey] ?? 130;
+
+                    return (
+                      <div
+                        key={dateKey}
+                        className="relative min-h-[78px] border-r border-b border-slate-200 bg-white p-1 overflow-hidden"
+                      >
+                        <div className="font-semibold text-slate-900 text-[11px] leading-none mb-1">
+                          {day}
+                        </div>
+
+                        <div className="space-y-0.5 min-h-[14px]">
+                          {dayReservations.map((r) => {
+                            const startsHere = isStart(dateKey, r.entrada);
+                            const previousDate = addDays(dateKey, -1);
+                            const continuesFromPrevious = isInside(
+                              previousDate,
+                              r.entrada,
+                              r.salida
+                            );
+
+                            return (
+                              <div
+                                key={`${r.id}-${dateKey}`}
+                                className={`${getColor(
+                                  r.tipo
+                                )} h-3.5 text-white text-[8px] flex items-center px-1 overflow-hidden ${
+                                  startsHere ? "rounded-l-full" : ""
+                                } ${
+                                  !isInside(
+                                    addDays(dateKey, 1),
+                                    r.entrada,
+                                    r.salida
+                                  )
+                                    ? "rounded-r-full"
+                                    : ""
+                                } ${continuesFromPrevious ? "-ml-2" : ""}`}
+                              >
+                                {startsHere
+                                  ? r.tipo.replace("Reserva ", "")
+                                  : ""}
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {checkOutsToday.length > 0 && (
+                          <div className="mt-1 rounded bg-slate-100 px-1 py-0.5 text-[8px] text-slate-600 leading-none">
+                            Salida 10:00
+                          </div>
+                        )}
+
+                        <div className="mt-1">
+                          <input
+                            type="number"
+                            inputMode="numeric"
+                            value={price}
+                            title="Precio noche"
+                            onChange={(e) =>
+                              setPrices((prev) => ({
+                                ...prev,
+                                [dateKey]: Number(e.target.value),
+                              }))
+                            }
+                            onBlur={(e) =>
+                              savePrice(dateKey, Number(e.target.value))
+                            }
+                            className="precio-noche w-full min-w-0 rounded border border-slate-300 px-0.5 py-0.5 text-center text-slate-900 text-[10px]"
+                          />
+                          {savingDate === dateKey && (
+                            <p className="text-[8px] mt-0.5 text-slate-500 leading-none">
+                              Guardando...
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
+
+      <p className="text-[11px] text-slate-400 mt-1">
+        Desliza el calendario de izquierda a derecha para ver los meses
+        siguientes.
+      </p>
     </div>
   );
 }

@@ -83,8 +83,8 @@ export default function AvailabilityCalendar({
   const [guestEmail, setGuestEmail] = useState("");
   const [minNochesRegla, setMinNochesRegla] = useState(0);
   const [dailyPrices, setDailyPrices] = useState<Record<string, number>>({});
-  const [weeklyDiscount, setWeeklyDiscount] = useState(0);
-  const [monthlyDiscount, setMonthlyDiscount] = useState(0);
+  // Descuento que devuelve el servidor (rate_rules). Fuente única de verdad.
+  const [serverDiscount, setServerDiscount] = useState(0);
 
   const today = new Date();
   const baseMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -95,19 +95,17 @@ export default function AvailabilityCalendar({
   useEffect(() => {
     async function loadAvailability() {
       try {
-        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes, pricingRulesRes] = await Promise.all([
+        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes] = await Promise.all([
           fetch("/api/availability"),
           fetch("/api/reservas"),
           fetch("/api/manual-blocks"),
           fetch("/api/prices"),
-          fetch("/api/pricing-rules"),
         ]);
 
         const availabilityData = await availabilityRes.json();
         const reservasData = await reservasRes.json();
         const manualBlocksData = await manualBlocksRes.json();
         const pricesData = await pricesRes.json();
-        const pricingRulesData = await pricingRulesRes.json();
 
         const icalBlocked = availabilityData.ok
           ? availabilityData.blocked || []
@@ -140,11 +138,6 @@ export default function AvailabilityCalendar({
           });
           setDailyPrices(map);
         }
-
-        if (pricingRulesData.ok) {
-          setWeeklyDiscount(pricingRulesData.rules.weekly_discount || 0);
-          setMonthlyDiscount(pricingRulesData.rules.monthly_discount || 0);
-        }
       } catch (error) {
         console.error("Error cargando disponibilidad:", error);
       } finally {
@@ -155,11 +148,12 @@ export default function AvailabilityCalendar({
     loadAvailability();
   }, []);
 
-  // Consulta al motor de tarifas si la estancia elegida es válida
+  // Consulta al motor de tarifas: estancia permitida + descuento aplicable.
   useEffect(() => {
     if (!checkIn || !checkOut) {
       setEstanciaPermitida(true);
       setMinNochesRegla(0);
+      setServerDiscount(0);
       return;
     }
     const n = nightsBetween(checkIn, checkOut);
@@ -169,15 +163,22 @@ export default function AvailabilityCalendar({
         if (data.ok && data.permitida === false) {
           setEstanciaPermitida(false);
           setMinNochesRegla(data.minNights || 0);
+          setServerDiscount(0);
+        } else if (data.ok && data.permitida === true) {
+          setEstanciaPermitida(true);
+          setMinNochesRegla(0);
+          setServerDiscount(Number(data.discountPercent) || 0);
         } else {
           setEstanciaPermitida(true);
           setMinNochesRegla(0);
+          setServerDiscount(0);
         }
       })
       .catch(() => {
         // Si falla la consulta, no bloqueamos: el servidor valida igual al pagar
         setEstanciaPermitida(true);
         setMinNochesRegla(0);
+        setServerDiscount(0);
       });
   }, [checkIn, checkOut]);
 
@@ -242,12 +243,9 @@ export default function AvailabilityCalendar({
 
   const subtotal = calculateSubtotal();
 
-  const activeDiscount =
-    nights >= 28 && monthlyDiscount > 0
-      ? monthlyDiscount
-      : nights >= 7 && weeklyDiscount > 0
-      ? weeklyDiscount
-      : 0;
+  // Descuento que aplicar: lo dice el servidor (rate_rules).
+  // Si no hay regla con descuento -> 0% (precio del calendario sin recorte).
+  const activeDiscount = serverDiscount;
 
   const discountAmount = Math.round((subtotal * activeDiscount) / 100);
   const discountedSubtotal = subtotal - discountAmount;
@@ -454,7 +452,7 @@ export default function AvailabilityCalendar({
           {activeDiscount > 0 && (
             <div className="flex justify-between mb-2 text-emerald-700 font-medium">
               <span>
-                Descuento estancia {nights >= 28 ? "mensual" : "semanal"} ({activeDiscount}%)
+                Descuento por estancia ({activeDiscount}%)
               </span>
               <span>-{discountAmount} €</span>
             </div>

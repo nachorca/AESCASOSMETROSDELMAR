@@ -5,9 +5,9 @@
 // Conecta con el motor de tarifas (evaluarTarifa):
 //   - Si hay regla en rate_rules para esas fechas -> manda esa
 //     regla: su descuento, y rechaza si no llega al mínimo.
-//   - Si NO hay regla -> usa el descuento clásico de
-//     pricing_rules (15% a 7+ noches, 50% a 28+).
-// Nunca se aplican los dos descuentos a la vez.
+//   - Si NO hay regla -> sin descuento: se cobra el precio del
+//     calendario (daily_prices) tal cual.
+// El sistema antiguo (pricing_rules) ya NO se usa.
 // ============================================================
 
 import { createClient } from "@supabase/supabase-js";
@@ -75,30 +75,10 @@ export async function calcularPrecio(checkIn: string, checkOut: string) {
     };
   }
 
-  // --- 3. Decidir el descuento (Opción A) ---
-  let activeDiscount = 0;
-
-  if (tarifa.discountPercent > 0) {
-    // Hay regla en rate_rules -> manda esa, se ignora pricing_rules
-    activeDiscount = tarifa.discountPercent;
-  } else {
-    // No hay regla con descuento -> usar el sistema clásico
-    const rulesRes = await supabase
-      .from("pricing_rules")
-      .select("weekly_discount, monthly_discount")
-      .limit(1)
-      .single();
-
-    const weeklyDiscount = rulesRes.data?.weekly_discount || 0;
-    const monthlyDiscount = rulesRes.data?.monthly_discount || 0;
-
-    activeDiscount =
-      nights >= 28 && monthlyDiscount > 0
-        ? monthlyDiscount
-        : nights >= 7 && weeklyDiscount > 0
-        ? weeklyDiscount
-        : 0;
-  }
+  // --- 3. Descuento: solo manda rate_rules ---
+  // Si hay regla, su descuento. Si no hay regla -> 0% (precio del
+  // calendario sin recorte). El sistema antiguo ya no interviene.
+  const activeDiscount = tarifa.discountPercent;
 
   // --- 4. Total final ---
   const discountAmount = Math.round((subtotal * activeDiscount) / 100);

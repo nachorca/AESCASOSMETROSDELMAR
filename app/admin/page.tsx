@@ -310,17 +310,13 @@ export default function AdminPage() {
   }
 
   function buildWhatsappUrl(row: any) {
-    const message = `Hola, para completar el registro obligatorio de viajeros de tu reserva en A escasos metros del mar, por favor accede al siguiente enlace de Check-in Scan: ${row.checkinscan_url || "ENLACE_CHECKIN_SCAN_PENDIENTE"}`;
-
     // Limpiamos el telefono: dejamos solo digitos (quita +, espacios, guiones,
     // parentesis). Se asume que el numero incluye el prefijo de pais.
     const telefono = String(row.guest_phone || "").replace(/\D/g, "");
 
-    // Si hay numero, lo usamos como destinatario; si no, abre WhatsApp sin
-    // destinatario (comportamiento anterior) para no romper nada.
-    return telefono
-      ? `https://wa.me/${telefono}?text=${encodeURIComponent(message)}`
-      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+    // Abre el chat con el huesped sin texto precargado. Si no hay numero,
+    // abre WhatsApp sin destinatario.
+    return telefono ? `https://wa.me/${telefono}` : `https://wa.me/`;
   }
 
   const unifiedRows = [

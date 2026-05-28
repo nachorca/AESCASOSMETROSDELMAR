@@ -36,6 +36,25 @@ export default function AdminPage() {
     return `${d}/${m}/${y}`;
   }
 
+  // Clasifica una reserva por fechas (no por la columna operativa):
+  //  - "pendiente":  la entrada es posterior a hoy
+  //  - "en_curso":   hoy esta entre la entrada (incluida) y la salida (excluida)
+  //  - "completada": la salida es hoy o anterior
+  // El dia de check-out NO cuenta como en casa.
+  function estadoPorFechas(entrada: string, salida: string) {
+    const hoy = new Date();
+    const hoyKey = `${hoy.getFullYear()}-${String(hoy.getMonth() + 1).padStart(
+      2,
+      "0"
+    )}-${String(hoy.getDate()).padStart(2, "0")}`;
+    const ent = String(entrada).slice(0, 10);
+    const sal = String(salida).slice(0, 10);
+    if (!ent || !sal) return "pendiente";
+    if (hoyKey < ent) return "pendiente";
+    if (hoyKey >= sal) return "completada";
+    return "en_curso";
+  }
+
   // Guarda una fila segun su tipo, llamando a las funciones que ya existen.
   async function guardarFila(r: any) {
     if (r.external) {
@@ -408,9 +427,11 @@ export default function AdminPage() {
   const filteredRows = unifiedRows.filter((r) => {
     switch (filtroReservas) {
       case "completadas":
-        return r.checkin_status === "checkout_done";
+        return estadoPorFechas(r.entrada, r.salida) === "completada";
       case "pendientes":
-        return r.checkin_status === "pending";
+        return estadoPorFechas(r.entrada, r.salida) === "pendiente";
+      case "en_curso":
+        return estadoPorFechas(r.entrada, r.salida) === "en_curso";
       case "booking":
         return r.tipo === "Reserva Booking";
       case "airbnb":
@@ -656,6 +677,7 @@ export default function AdminPage() {
                 className="rounded-xl border border-slate-300 px-4 py-2 text-sm"
               >
                 <option value="todas">Todas las reservas</option>
+                <option value="en_curso">Reservas en curso (en casa)</option>
                 <option value="completadas">Reservas completadas</option>
                 <option value="pendientes">Reservas pendientes</option>
                 <option value="booking">Reservas de Booking</option>
@@ -690,10 +712,14 @@ export default function AdminPage() {
             <tbody>
               {filteredRows.map((r) => {
                 const editando = editingId === r.id;
+                const enCurso =
+                  estadoPorFechas(r.entrada, r.salida) === "en_curso";
                 return (
                 <tr
                   key={`${r.tipo}-${r.id}`}
                   className={`border-t border-slate-200 align-top ${
+                    enCurso ? "border-l-4 border-l-emerald-500" : ""
+                  } ${
                     r.estado === "conflict"
                       ? "bg-red-50"
                       : r.tipo === "Reserva Booking"
@@ -789,6 +815,11 @@ export default function AdminPage() {
 
                   {/* ESTADO: estado + pago + importe */}
                   <td className="p-3">
+                    {enCurso && (
+                      <span className="inline-block rounded-lg bg-emerald-500 text-white px-2 py-1 text-xs font-semibold mb-1">
+                        🟢 En casa ahora
+                      </span>
+                    )}
                     {r.estado === "conflict" ? (
                       <span className="rounded-lg bg-red-600 text-white px-2 py-1 text-xs font-semibold">
                         CONFLICTO

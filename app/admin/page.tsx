@@ -24,6 +24,32 @@ export default function AdminPage() {
   const [rangeEnd, setRangeEnd] = useState("");
   const [rangePrice, setRangePrice] = useState("");
   const [rangeSaving, setRangeSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Devuelve una fecha ISO (yyyy-mm-dd) en formato dd/mm/yyyy para lectura.
+  function formatearFecha(iso: string) {
+    if (!iso) return "—";
+    const partes = String(iso).slice(0, 10).split("-");
+    if (partes.length !== 3) return iso;
+    const [y, m, d] = partes;
+    return `${d}/${m}/${y}`;
+  }
+
+  // Guarda una fila segun su tipo, llamando a las funciones que ya existen.
+  async function guardarFila(r: any) {
+    if (r.external) {
+      await actualizarDatosHuesped(r);
+      await actualizarEstadoOperativo(r);
+    } else if (r.manual) {
+      await actualizarBloqueoManual(r);
+      await actualizarDatosHuesped(r);
+      await actualizarEstadoOperativo(r);
+    } else {
+      await actualizarDatosHuesped(r);
+      await actualizarEstadoOperativo(r);
+    }
+    setEditingId(null);
+  }
 
   async function aplicarPrecioRango() {
     setError("");
@@ -95,6 +121,12 @@ export default function AdminPage() {
 
     const source = row.external ? "external" : row.manual ? "manual" : "stripe";
 
+    // El email vive en guest_email para externas y en customer_email para
+    // stripe/manual. Elegimos el que corresponda para no mandar uno vacio.
+    const emailAEnviar = row.external
+      ? row.guest_email
+      : row.customer_email ?? row.guest_email;
+
     const res = await fetch("/api/admin/update-guest", {
       method: "POST",
       headers: {
@@ -106,7 +138,7 @@ export default function AdminPage() {
         source,
         guest_name: row.guest_name,
         guest_phone: row.guest_phone,
-        guest_email: row.guest_email,
+        guest_email: emailAEnviar,
       }),
     });
 
@@ -615,7 +647,9 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {unifiedRows.map((r) => (
+              {unifiedRows.map((r) => {
+                const editando = editingId === r.id;
+                return (
                 <tr
                   key={`${r.tipo}-${r.id}`}
                   className={`border-t border-slate-200 align-top ${
@@ -635,71 +669,80 @@ export default function AdminPage() {
                   {/* RESERVA: tipo + huesped */}
                   <td className="p-3">
                     <div className="font-medium">{r.tipo}</div>
-                    <input
-                      type="text"
-                      value={r.guest_name}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, guest_name: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, customer_name: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, customer_name: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                      placeholder="Nombre"
-                    />
+                    {editando ? (
+                      <input
+                        type="text"
+                        value={r.guest_name}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (r.external) {
+                            setExternalReservations((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, guest_name: value } : x
+                              )
+                            );
+                          } else if (r.manual) {
+                            setBlocks((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, customer_name: value } : x
+                              )
+                            );
+                          } else {
+                            setReservas((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, customer_name: value } : x
+                              )
+                            );
+                          }
+                        }}
+                        className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                        placeholder="Nombre"
+                      />
+                    ) : (
+                      <div className="text-slate-600 mt-1">
+                        {r.guest_name || "—"}
+                      </div>
+                    )}
                   </td>
 
                   {/* FECHAS: entrada + salida */}
                   <td className="p-3">
-                    {r.manual ? (
-                      <input
-                        type="date"
-                        value={r.entrada}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setBlocks((prev) =>
-                            prev.map((b) =>
-                              b.id === r.id ? { ...b, start_date: value } : b
-                            )
-                          );
-                        }}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                      />
+                    {editando && r.manual ? (
+                      <>
+                        <input
+                          type="date"
+                          value={r.entrada}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setBlocks((prev) =>
+                              prev.map((b) =>
+                                b.id === r.id ? { ...b, start_date: value } : b
+                              )
+                            );
+                          }}
+                          className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                        />
+                        <input
+                          type="date"
+                          value={r.salida}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            setBlocks((prev) =>
+                              prev.map((b) =>
+                                b.id === r.id ? { ...b, end_date: value } : b
+                              )
+                            );
+                          }}
+                          className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                        />
+                      </>
                     ) : (
-                      <div>{r.entrada}</div>
-                    )}
-                    {r.manual ? (
-                      <input
-                        type="date"
-                        value={r.salida}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setBlocks((prev) =>
-                            prev.map((b) =>
-                              b.id === r.id ? { ...b, end_date: value } : b
-                            )
-                          );
-                        }}
-                        className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                      />
-                    ) : (
-                      <div className="text-slate-500">{r.salida}</div>
+                      <>
+                        <div>{formatearFecha(r.entrada)}</div>
+                        <div className="text-slate-500">
+                          {formatearFecha(r.salida)}
+                        </div>
+                      </>
                     )}
                   </td>
 
@@ -707,58 +750,61 @@ export default function AdminPage() {
                   <td className="p-3">
                     {r.estado === "conflict" ? (
                       <span className="rounded-lg bg-red-600 text-white px-2 py-1 text-xs font-semibold">
-                        ⚠️ CONFLICTO
+                        CONFLICTO
                       </span>
                     ) : (
                       <div className="font-medium">{r.estado}</div>
                     )}
                     <div className="text-slate-500 text-xs mt-1">
-                      {r.pago || "—"}{r.importe ? ` · ${r.importe}` : ""}
+                      {r.pago || "—"}{r.importe && r.importe !== "-" ? ` · ${r.importe}` : ""}
                     </div>
                   </td>
 
-                  {/* OPERATIVA: check-in + limpieza */}
+                  {/* OPERATIVA: check-in */}
                   <td className="p-3">
-                    <select
-                      value={r.checkin_status}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, checkin_status: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                    >
-                      <option value="pending">Check-in: Pendiente</option>
-                      <option value="checkin_done">Check-in realizado</option>
-                      <option value="checkout_done">Check-out realizado</option>
-                    </select>
-
-                    <button
-                      onClick={() => actualizarEstadoOperativo(r)}
-                      className="mt-1 rounded-lg bg-slate-900 text-white px-3 py-1 text-xs w-full"
-                    >
-                      Guardar estado
-                    </button>
+                    {editando ? (
+                      <select
+                        value={r.checkin_status}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (r.external) {
+                            setExternalReservations((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, checkin_status: value } : x
+                              )
+                            );
+                          } else if (r.manual) {
+                            setBlocks((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, checkin_status: value } : x
+                              )
+                            );
+                          } else {
+                            setReservas((prev) =>
+                              prev.map((x) =>
+                                x.id === r.id ? { ...x, checkin_status: value } : x
+                              )
+                            );
+                          }
+                        }}
+                        className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                      >
+                        <option value="pending">Check-in: Pendiente</option>
+                        <option value="checkin_done">Check-in realizado</option>
+                        <option value="checkout_done">Check-out realizado</option>
+                      </select>
+                    ) : (
+                      <div className="text-slate-600">
+                        {r.checkin_status === "checkin_done"
+                          ? "Check-in realizado"
+                          : r.checkin_status === "checkout_done"
+                          ? "Check-out realizado"
+                          : "Check-in: Pendiente"}
+                      </div>
+                    )}
                   </td>
 
-                  {/* CHECK-IN SCAN */}
+                  {/* CHECK-IN SCAN (siempre visible) */}
                   <td className="p-3">
                     <div className="flex flex-col gap-2">
                       {r.checkinscan_status === "not_sent" ? (
@@ -766,8 +812,7 @@ export default function AdminPage() {
                           <button className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm">
                             Enviar
                           </button>
-                          
-                            <a
+                          <a
                             href={buildWhatsappUrl(r)}
                             target="_blank"
                             rel="noopener noreferrer"
@@ -790,132 +835,156 @@ export default function AdminPage() {
 
                   {/* CONTACTO: telefono + email + motivo */}
                   <td className="p-3">
-                    <div className="flex gap-1">
-                      <input
-                        type="tel"
-                        value={r.guest_phone}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (r.external) {
-                            setExternalReservations((prev) =>
-                              prev.map((x) =>
-                                x.id === r.id ? { ...x, guest_phone: value } : x
-                              )
-                            );
-                          } else if (r.manual) {
-                            setBlocks((prev) =>
-                              prev.map((x) =>
-                                x.id === r.id ? { ...x, customer_phone: value } : x
-                              )
-                            );
-                          } else {
-                            setReservas((prev) =>
-                              prev.map((x) =>
-                                x.id === r.id ? { ...x, customer_phone: value } : x
-                              )
-                            );
+                    {editando ? (
+                      <>
+                        <input
+                          type="tel"
+                          value={r.guest_phone}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (r.external) {
+                              setExternalReservations((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, guest_phone: value } : x
+                                )
+                              );
+                            } else if (r.manual) {
+                              setBlocks((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, customer_phone: value } : x
+                                )
+                              );
+                            } else {
+                              setReservas((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, customer_phone: value } : x
+                                )
+                              );
+                            }
+                          }}
+                          className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                          placeholder="+34..."
+                        />
+                        <input
+                          type="email"
+                          value={
+                            r.external
+                              ? r.guest_email ?? (r.email === "-" ? "" : r.email)
+                              : r.customer_email ?? (r.email === "-" ? "" : r.email)
                           }
-                        }}
-                        className="rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                        placeholder="+34..."
-                      />
-                      <button
-                        onClick={() => actualizarDatosHuesped(r)}
-                        className="rounded-lg bg-slate-900 text-white px-2 py-1 text-xs shrink-0"
-                      >
-                        Guardar
-                      </button>
-                    </div>
-                    <input
-                      type="email"
-                      value={
-                        r.external
-                          ? r.guest_email ?? (r.email === "-" ? "" : r.email)
-                          : r.customer_email ?? (r.email === "-" ? "" : r.email)
-                      }
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        if (r.external) {
-                          setExternalReservations((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, guest_email: value } : x
-                            )
-                          );
-                        } else if (r.manual) {
-                          setBlocks((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, customer_email: value } : x
-                            )
-                          );
-                        } else {
-                          setReservas((prev) =>
-                            prev.map((x) =>
-                              x.id === r.id ? { ...x, customer_email: value } : x
-                            )
-                          );
-                        }
-                      }}
-                      className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                      placeholder="Email"
-                    />
-                    {r.manual ? (
-                      <input
-                        type="text"
-                        value={r.motivo}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          setBlocks((prev) =>
-                            prev.map((b) =>
-                              b.id === r.id ? { ...b, reason: value } : b
-                            )
-                          );
-                        }}
-                        className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
-                        placeholder="Motivo"
-                      />
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (r.external) {
+                              setExternalReservations((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, guest_email: value } : x
+                                )
+                              );
+                            } else if (r.manual) {
+                              setBlocks((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, customer_email: value } : x
+                                )
+                              );
+                            } else {
+                              setReservas((prev) =>
+                                prev.map((x) =>
+                                  x.id === r.id ? { ...x, customer_email: value } : x
+                                )
+                              );
+                            }
+                          }}
+                          className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                          placeholder="Email"
+                        />
+                        {r.manual && (
+                          <input
+                            type="text"
+                            value={r.motivo}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              setBlocks((prev) =>
+                                prev.map((b) =>
+                                  b.id === r.id ? { ...b, reason: value } : b
+                                )
+                              );
+                            }}
+                            className="mt-1 rounded-lg border border-slate-300 px-2 py-1 text-sm w-full"
+                            placeholder="Motivo"
+                          />
+                        )}
+                      </>
                     ) : (
-                      <div className="text-slate-400 text-xs mt-1">{r.motivo}</div>
+                      <>
+                        <div className="text-slate-600">
+                          {r.guest_phone || "—"}
+                        </div>
+                        <div className="text-slate-500 text-xs mt-1">
+                          {(r.external ? r.guest_email : r.customer_email) ||
+                            (r.email === "-" ? "" : r.email) ||
+                            "—"}
+                        </div>
+                        {r.manual && (
+                          <div className="text-slate-400 text-xs mt-1">
+                            {r.motivo}
+                          </div>
+                        )}
+                      </>
                     )}
                   </td>
 
-                  {/* ACCIONES */}
+                  {/* ACCIONES: Editar/Borrar  o  Guardar/Cancelar */}
                   <td className="p-3">
-                    {r.manual ? (
+                    {editando ? (
                       <div className="flex flex-col gap-1">
                         <button
-                          onClick={() => actualizarBloqueoManual(r)}
-                          className="rounded-lg bg-slate-900 text-white px-3 py-2 text-sm"
+                          onClick={() => guardarFila(r)}
+                          className="rounded-lg bg-emerald-600 text-white px-3 py-2 text-sm"
                         >
                           Guardar
                         </button>
                         <button
-                          onClick={() => borrarBloqueo(r.id)}
-                          className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm"
+                          onClick={() => {
+                            setEditingId(null);
+                            cargarDatos();
+                          }}
+                          className="rounded-lg bg-slate-200 text-slate-700 px-3 py-2 text-sm"
                         >
-                          Borrar
+                          Cancelar
                         </button>
                       </div>
-                    ) : r.external ? (
-                      <span className="text-slate-400">Externa</span>
                     ) : (
-                      <button
-                        onClick={() => {
-                          if (
-                            confirm(
-                              "¿Seguro que quieres borrar esta reserva? Esta acción no se puede deshacer y liberará las fechas en el calendario."
-                            )
-                          ) {
-                            borrarReservaStripe(r.id);
-                          }
-                        }}
-                        className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm"
-                      >
-                        Borrar
-                      </button>
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={() => setEditingId(r.id)}
+                          className="rounded-lg bg-slate-900 text-white px-3 py-2 text-sm"
+                        >
+                          Editar
+                        </button>
+                        {!r.external && (
+                          <button
+                            onClick={() => {
+                              if (r.manual) {
+                                borrarBloqueo(r.id);
+                              } else if (
+                                confirm(
+                                  "¿Seguro que quieres borrar esta reserva? Esta acción no se puede deshacer y liberará las fechas en el calendario."
+                                )
+                              ) {
+                                borrarReservaStripe(r.id);
+                              }
+                            }}
+                            className="rounded-lg bg-red-600 text-white px-3 py-2 text-sm"
+                          >
+                            Borrar
+                          </button>
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
 
               {!unifiedRows.length && (
                 <tr>

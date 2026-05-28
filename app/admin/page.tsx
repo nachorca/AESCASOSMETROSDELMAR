@@ -20,6 +20,46 @@ export default function AdminPage() {
   const [monthlyDiscount, setMonthlyDiscount] = useState(0);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [showCalendar, setShowCalendar] = useState(false);
+  const [rangeStart, setRangeStart] = useState("");
+  const [rangeEnd, setRangeEnd] = useState("");
+  const [rangePrice, setRangePrice] = useState("");
+  const [rangeSaving, setRangeSaving] = useState(false);
+
+  async function aplicarPrecioRango() {
+    setError("");
+    if (!rangeStart || !rangeEnd || !rangePrice) {
+      setError("Completa las 3 casillas: Desde, Hasta y Precio");
+      return;
+    }
+    const precio = Number(rangePrice);
+    if (!Number.isFinite(precio) || precio < 0) {
+      setError("El precio no es valido");
+      return;
+    }
+    setRangeSaving(true);
+    const res = await fetch("/api/prices/bulk", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-password": password,
+      },
+      body: JSON.stringify({
+        start: rangeStart,
+        end: rangeEnd,
+        price: precio,
+      }),
+    });
+    const data = await res.json();
+    setRangeSaving(false);
+    if (!data.ok) {
+      setError(data.error || "No se pudo aplicar el precio al rango");
+      return;
+    }
+    alert("Precio " + precio + " EUR aplicado a " + data.updated + " dias");
+    setRangeStart("");
+    setRangeEnd("");
+    setRangePrice("");
+  }
 
   async function actualizarEstadoOperativo(row: any) {
     setError("");
@@ -498,6 +538,54 @@ export default function AdminPage() {
           {showCalendar && (
             <AdminCalendar reservations={unifiedRows} adminPassword={password} />
           )}
+        </div>
+
+        <div className="mb-8 rounded-2xl bg-white border border-slate-200 p-6">
+          <h2 className="text-2xl font-semibold mb-2">
+            Precio por rango de fechas
+          </h2>
+          <p className="text-sm text-slate-500 mb-4">
+            Aplica un mismo precio a todas las noches del rango.
+            Sobrescribe los precios existentes en ese rango sin previo aviso.
+          </p>
+          <div className="grid md:grid-cols-4 gap-3 items-end">
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">Desde</label>
+              <input
+                type="date"
+                value={rangeStart}
+                onChange={(e) => setRangeStart(e.target.value)}
+                className="w-full rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">Hasta</label>
+              <input
+                type="date"
+                value={rangeEnd}
+                onChange={(e) => setRangeEnd(e.target.value)}
+                className="w-full rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">Precio EUR</label>
+              <input
+                type="number"
+                inputMode="numeric"
+                value={rangePrice}
+                onChange={(e) => setRangePrice(e.target.value)}
+                placeholder="p. ej. 150"
+                className="w-full rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </div>
+            <button
+              onClick={aplicarPrecioRango}
+              disabled={rangeSaving}
+              className={"rounded-xl px-5 py-3 text-sm text-white " + (rangeSaving ? "bg-slate-400 cursor-not-allowed" : "bg-slate-900")}
+            >
+              {rangeSaving ? "Aplicando..." : "Aplicar precio al rango"}
+            </button>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-2xl bg-white border border-slate-200">

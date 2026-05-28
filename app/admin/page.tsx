@@ -19,6 +19,7 @@ export default function AdminPage() {
   const [weeklyDiscount, setWeeklyDiscount] = useState(0);
   const [monthlyDiscount, setMonthlyDiscount] = useState(0);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [filtroReservas, setFiltroReservas] = useState("todas");
   const [showCalendar, setShowCalendar] = useState(false);
   const [rangeStart, setRangeStart] = useState("");
   const [rangeEnd, setRangeEnd] = useState("");
@@ -403,6 +404,26 @@ export default function AdminPage() {
       : String(b.entrada).localeCompare(String(a.entrada))
   );
 
+  // Filtro de la tabla de reservas operativas.
+  const filteredRows = unifiedRows.filter((r) => {
+    switch (filtroReservas) {
+      case "completadas":
+        return r.checkin_status === "checkout_done";
+      case "pendientes":
+        return r.checkin_status === "pending";
+      case "booking":
+        return r.tipo === "Reserva Booking";
+      case "airbnb":
+        return r.tipo === "Reserva Airbnb";
+      case "manual":
+        return r.tipo === "Reserva manual";
+      case "stripe":
+        return r.tipo === "Reserva Stripe";
+      default:
+        return true; // "todas"
+    }
+  });
+
   if (!isAdmin) {
     return (
       <main className="min-h-screen bg-[#f7f4ee] px-6 py-10">
@@ -628,14 +649,30 @@ export default function AdminPage() {
           <div className="flex items-center justify-between p-5">
             <h2 className="text-xl font-semibold">Reservas operativas</h2>
 
-            <button
-              onClick={() =>
-                setSortDirection(sortDirection === "asc" ? "desc" : "asc")
-              }
-              className="rounded-xl bg-slate-900 text-white px-5 py-2 text-sm"
-            >
-              Ordenar por fecha {sortDirection === "asc" ? "↑" : "↓"}
-            </button>
+            <div className="flex items-center gap-2">
+              <select
+                value={filtroReservas}
+                onChange={(e) => setFiltroReservas(e.target.value)}
+                className="rounded-xl border border-slate-300 px-4 py-2 text-sm"
+              >
+                <option value="todas">Todas las reservas</option>
+                <option value="completadas">Reservas completadas</option>
+                <option value="pendientes">Reservas pendientes</option>
+                <option value="booking">Reservas de Booking</option>
+                <option value="airbnb">Reservas de Airbnb</option>
+                <option value="manual">Reservas manuales</option>
+                <option value="stripe">Reservas Stripe</option>
+              </select>
+
+              <button
+                onClick={() =>
+                  setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+                }
+                className="rounded-xl bg-slate-900 text-white px-5 py-2 text-sm"
+              >
+                Ordenar por fecha {sortDirection === "asc" ? "↑" : "↓"}
+              </button>
+            </div>
           </div>
 
           <table className="w-full text-sm table-fixed">
@@ -651,7 +688,7 @@ export default function AdminPage() {
               </tr>
             </thead>
             <tbody>
-              {unifiedRows.map((r) => {
+              {filteredRows.map((r) => {
                 const editando = editingId === r.id;
                 return (
                 <tr
@@ -990,7 +1027,7 @@ export default function AdminPage() {
                 );
               })}
 
-              {!unifiedRows.length && (
+              {!filteredRows.length && (
                 <tr>
                   <td className="p-6 text-slate-500" colSpan={7}>
                     No hay reservas todavía.

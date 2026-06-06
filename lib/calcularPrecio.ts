@@ -7,6 +7,8 @@
 //     regla: su descuento, y rechaza si no llega al mínimo.
 //   - Si NO hay regla -> sin descuento: se cobra el precio del
 //     calendario (daily_prices) tal cual.
+// La tarifa de limpieza se lee de la tabla `settings`
+// (clave `cleaning_fee`), editable desde el panel admin.
 // El sistema antiguo (pricing_rules) ya NO se usa.
 // ============================================================
 
@@ -19,7 +21,7 @@ const supabase = createClient(
 );
 
 const PRECIO_FALLBACK = 130;
-const LIMPIEZA = 75;
+const LIMPIEZA_FALLBACK = 75;
 
 function toKey(d: Date) {
   // Fecha en horario LOCAL (no UTC) para no leer el día equivocado.
@@ -33,6 +35,18 @@ function nightsBetween(checkIn: string, checkOut: string) {
   const a = new Date(checkIn + "T00:00:00");
   const b = new Date(checkOut + "T00:00:00");
   return Math.round((b.getTime() - a.getTime()) / 86400000);
+}
+
+async function getCleaningFee(): Promise<number> {
+  const { data, error } = await supabase
+    .from("settings")
+    .select("value")
+    .eq("key", "cleaning_fee")
+    .maybeSingle();
+
+  if (error || !data) return LIMPIEZA_FALLBACK;
+  const n = Number(data.value);
+  return Number.isFinite(n) && n >= 0 ? n : LIMPIEZA_FALLBACK;
 }
 
 export async function calcularPrecio(checkIn: string, checkOut: string) {
@@ -76,14 +90,15 @@ export async function calcularPrecio(checkIn: string, checkOut: string) {
   }
 
   // --- 3. Descuento: solo manda rate_rules ---
-  // Si hay regla, su descuento. Si no hay regla -> 0% (precio del
-  // calendario sin recorte). El sistema antiguo ya no interviene.
   const activeDiscount = tarifa.discountPercent;
 
-  // --- 4. Total final ---
+  // --- 4. Tarifa de limpieza desde settings (editable en admin) ---
+  const cleaningFee = await getCleaningFee();
+
+  // --- 5. Total final ---
   const discountAmount = Math.round((subtotal * activeDiscount) / 100);
   const discountedSubtotal = subtotal - discountAmount;
-  const total = discountedSubtotal + LIMPIEZA;
+  const total = discountedSubtotal + cleaningFee;
 
   return {
     ok: true as const,
@@ -91,7 +106,7 @@ export async function calcularPrecio(checkIn: string, checkOut: string) {
     subtotal,
     discountPercent: activeDiscount,
     discountAmount,
-    cleaningFee: LIMPIEZA,
+    cleaningFee,
     total,
     totalCents: total * 100,
   };

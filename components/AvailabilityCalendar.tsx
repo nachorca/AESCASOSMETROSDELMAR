@@ -83,6 +83,9 @@ export default function AvailabilityCalendar({
   const [guestEmail, setGuestEmail] = useState("");
   const [minNochesRegla, setMinNochesRegla] = useState(0);
   const [dailyPrices, setDailyPrices] = useState<Record<string, number>>({});
+  // Tarifa de limpieza editable desde el panel admin (tabla settings).
+  // Fallback 75 si la API falla, para no romper la UI.
+  const [cleaningFee, setCleaningFee] = useState(75);
   // Descuento que devuelve el servidor (rate_rules). Fuente única de verdad.
   const [serverDiscount, setServerDiscount] = useState(0);
 
@@ -95,17 +98,19 @@ export default function AvailabilityCalendar({
   useEffect(() => {
     async function loadAvailability() {
       try {
-        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes] = await Promise.all([
+        const [availabilityRes, reservasRes, manualBlocksRes, pricesRes, settingsRes] = await Promise.all([
           fetch("/api/availability"),
           fetch("/api/reservas"),
           fetch("/api/manual-blocks"),
           fetch("/api/prices"),
+          fetch("/api/settings"),
         ]);
 
         const availabilityData = await availabilityRes.json();
         const reservasData = await reservasRes.json();
         const manualBlocksData = await manualBlocksRes.json();
         const pricesData = await pricesRes.json();
+        const settingsData = await settingsRes.json();
 
         const icalBlocked = availabilityData.ok
           ? availabilityData.blocked || []
@@ -137,6 +142,12 @@ export default function AvailabilityCalendar({
             map[p.date] = p.price;
           });
           setDailyPrices(map);
+        }
+
+        // Tarifa de limpieza desde la tabla settings (editable desde admin).
+        if (settingsData.ok && settingsData.settings?.cleaning_fee) {
+          const n = Number(settingsData.settings.cleaning_fee);
+          if (Number.isFinite(n) && n >= 0) setCleaningFee(n);
         }
       } catch (error) {
         console.error("Error cargando disponibilidad:", error);
@@ -221,7 +232,6 @@ export default function AvailabilityCalendar({
   const nights = checkIn && checkOut ? nightsBetween(checkIn, checkOut) : 0;
 
   const pricePerNight = 130;
-  const cleaningFee = 75;
 
   function getNightPrice(dateKey: string) {
     return dailyPrices[dateKey] ?? pricePerNight;

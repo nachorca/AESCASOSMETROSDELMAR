@@ -3,7 +3,7 @@
 import AdminCalendar from "@/components/AdminCalendar";
 import AdminRateRules from "@/components/AdminRateRules";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function AdminPage() {
   const [password, setPassword] = useState("");
@@ -26,6 +26,53 @@ export default function AdminPage() {
   const [rangePrice, setRangePrice] = useState("");
   const [rangeSaving, setRangeSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  // Tarifa de limpieza editable (tabla settings).
+  const [cleaningFee, setCleaningFee] = useState("");
+  const [cleaningSaving, setCleaningSaving] = useState(false);
+  const [cleaningMsg, setCleaningMsg] = useState("");
+
+  // Cargar la tarifa de limpieza actual al entrar.
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.ok && data.settings?.cleaning_fee) {
+          setCleaningFee(String(data.settings.cleaning_fee));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  async function guardarTarifaLimpieza() {
+    const n = Number(cleaningFee);
+    if (!Number.isFinite(n) || n < 0) {
+      setCleaningMsg("Introduce un importe válido (>= 0)");
+      return;
+    }
+    setCleaningSaving(true);
+    setCleaningMsg("");
+    try {
+      const res = await fetch("/api/settings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": password,
+        },
+        body: JSON.stringify({ key: "cleaning_fee", value: String(n) }),
+      });
+      const data = await res.json();
+      if (data.ok) {
+        setCleaningMsg(`Guardado: ${n} €`);
+      } else {
+        setCleaningMsg(data.error || "No se pudo guardar");
+      }
+    } catch {
+      setCleaningMsg("Error de conexión");
+    } finally {
+      setCleaningSaving(false);
+    }
+  }
 
   // Devuelve una fecha ISO (yyyy-mm-dd) en formato dd/mm/yyyy para lectura.
   function formatearFecha(iso: string) {
@@ -616,6 +663,40 @@ export default function AdminPage() {
           {showCalendar && (
             <AdminCalendar reservations={unifiedRows} adminPassword={password} />
           )}
+        </div>
+
+        <div className="mb-8 rounded-2xl bg-white border border-slate-200 p-6">
+          <h2 className="text-2xl font-semibold mb-2">
+            Tarifa de limpieza
+          </h2>
+          <p className="text-sm text-slate-500 mb-4">
+            Importe fijo que se suma al total de cada reserva. Se ve reflejado
+            en el calendario de los clientes al instante.
+          </p>
+          <div className="flex flex-wrap items-end gap-3">
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">Limpieza EUR</label>
+              <input
+                type="number"
+                inputMode="numeric"
+                min={0}
+                value={cleaningFee}
+                onChange={(e) => setCleaningFee(e.target.value)}
+                placeholder="p. ej. 75"
+                className="w-40 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </div>
+            <button
+              onClick={guardarTarifaLimpieza}
+              disabled={cleaningSaving}
+              className="rounded-xl bg-slate-900 text-white px-5 py-2 text-sm disabled:opacity-50"
+            >
+              {cleaningSaving ? "Guardando..." : "Guardar"}
+            </button>
+            {cleaningMsg && (
+              <span className="text-sm text-slate-600">{cleaningMsg}</span>
+            )}
+          </div>
         </div>
 
         <div className="mb-8 rounded-2xl bg-white border border-slate-200 p-6">

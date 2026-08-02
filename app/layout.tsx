@@ -29,6 +29,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // Base para resolver URLs relativas de OG/canonical/hreflang
+  metadataBase: new URL("https://aescasosmetrosdelmar.com"),
   title: "A escasos metros del mar | Apartamento turístico en El Campello",
   description:
     "Apartamento turístico junto al paseo marítimo de El Campello, Alicante. Estancia junto al mar, reserva directa, calendario disponible y alojamiento mediterráneo.",
@@ -40,6 +42,31 @@ export const metadata: Metadata = {
     "paseo marítimo El Campello",
     "vacaciones Alicante playa",
   ],
+  // Tarjeta al compartir el enlace (WhatsApp, Facebook, etc.)
+  openGraph: {
+    type: "website",
+    siteName: "A escasos metros del mar",
+    title: "A escasos metros del mar | Apartamento turístico en El Campello",
+    description:
+      "Apartamento a 50 metros del Mediterráneo en El Campello, Alicante. Reserva directa sin comisiones.",
+    locale: "es_ES",
+    images: [
+      {
+        url: "/images/portada.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Apartamento turístico A escasos metros del mar, El Campello",
+      },
+    ],
+  },
+  // Tarjeta en X/Twitter
+  twitter: {
+    card: "summary_large_image",
+    title: "A escasos metros del mar | Apartamento en El Campello",
+    description:
+      "Apartamento a 50 metros del Mediterráneo. Reserva directa sin comisiones.",
+    images: ["/images/portada.jpg"],
+  },
 };
 
 export default function RootLayout({

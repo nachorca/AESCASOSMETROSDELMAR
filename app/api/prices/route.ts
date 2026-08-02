@@ -7,9 +7,14 @@ function isAdmin(req: Request) {
   return req.headers.get("x-admin-password") === process.env.ADMIN_PASSWORD;
 }
 export async function GET() {
+  // Supabase corta por defecto en 1000 filas: con precios de mas
+  // de ~3 anos los calendarios dejarian de ver los dias lejanos.
+  // Subimos el limite explicitamente (5000 dias ~ 13 anos).
   const { data, error } = await supabase
     .from("daily_prices")
-    .select("*");
+    .select("*")
+    .order("date", { ascending: true })
+    .limit(5000);
   if (error) {
     return Response.json(
       { ok: false, error: error.message },

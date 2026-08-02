@@ -32,9 +32,9 @@ export default async function Home({
       {/* ============== HEADER ============== */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-black/25 backdrop-blur-md border-b border-white/10">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between text-white">
-          <a href={`/${locale}`} className="font-semibold tracking-wide">
+          <Link href={`/${locale}`} className="font-semibold tracking-wide">
             {propertyConfig.brand}
-          </a>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-sm text-white/85">
             <a href="#apartamento" className="hover:text-white">
@@ -386,12 +386,12 @@ export default async function Home({
               {t("footer.rights")}
             </p>
             <p className="mt-4">
-              <a
+              <Link
                 href="/admin"
                 className="text-white/40 hover:text-white/70 transition text-xs"
               >
                 {t("footer.ownerAccess")}
-              </a>
+              </Link>
             </p>
           </div>
         </div>

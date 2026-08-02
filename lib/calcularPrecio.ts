@@ -57,9 +57,16 @@ export async function calcularPrecio(checkIn: string, checkOut: string) {
   const nights = nightsBetween(checkIn, checkOut);
 
   // --- 1. Suma de precios por noche (daily_prices) ---
+  // Pedimos SOLO los días de la estancia [checkIn, checkOut).
+  // Antes se traían todas las filas de la tabla, pero Supabase
+  // limita por defecto a 1000 filas: con precios de varios años
+  // las fechas lejanas se perdían y caían al PRECIO_FALLBACK sin
+  // avisar. Filtrando por rango, nunca superamos unas pocas filas.
   const pricesRes = await supabase
     .from("daily_prices")
-    .select("date, price");
+    .select("date, price")
+    .gte("date", checkIn)
+    .lt("date", checkOut);
 
   if (pricesRes.error) {
     return { ok: false as const, error: "No se pudo calcular el precio" };
